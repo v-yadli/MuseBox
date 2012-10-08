@@ -63,6 +63,27 @@ namespace MuseBox
             RtAudioInstance.stopStream();
             RtAudioInstance.startStream();
         }
+        public static unsafe void Test()
+        {
+            Console.WriteLine("Compiled APIs:");
+            foreach (var i in RtAudio.getCompiledApi())
+                Console.WriteLine(i);
+            var deviceCount = RtAudioInstance.getDeviceCount();
+            Console.WriteLine("Device count = {0}", deviceCount);
+            for (uint i = 0; i < deviceCount; ++i)
+            {
+                var deviceInfo = RtAudioInstance.getDeviceInfo(i);
+                Console.WriteLine("\t" + "deviceInfo.duplexChannels:\t" + deviceInfo.duplexChannels);
+                Console.WriteLine("\t" + "deviceInfo.inputChannels:\t" + deviceInfo.inputChannels);
+                Console.WriteLine("\t" + "deviceInfo.isDefaultInput:\t" + deviceInfo.isDefaultInput);
+                Console.WriteLine("\t" + "deviceInfo.isDefaultOutput:\t" + deviceInfo.isDefaultOutput);
+                Console.WriteLine("\t" + "deviceInfo.name:\t" + deviceInfo.name);
+                Console.WriteLine("\t" + "deviceInfo.nativeFormats:\t" + deviceInfo.nativeFormats);
+                Console.WriteLine("\t" + "deviceInfo.outputChannels:\t" + deviceInfo.outputChannels);
+                Console.WriteLine("\t" + "deviceInfo.probed:\t" + deviceInfo.probed);
+                Console.WriteLine("\t" + "deviceInfo.sampleRates:\t" + string.Join(";", deviceInfo.sampleRates.Select(x => x.ToString())));
+            }
+        }
         public static int TimeStamp = 0;
 
         private static uint sampleRate = 44100;

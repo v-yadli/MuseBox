@@ -5,7 +5,10 @@ using System.Text;
 
 namespace MuseBox
 {
-    unsafe static class Global
+    class MuseEvent
+    {
+    }
+    static class EventManager
     {
     }
 }
