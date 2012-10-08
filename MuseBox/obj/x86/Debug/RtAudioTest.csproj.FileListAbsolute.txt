@@ -1,0 +1,7 @@
+c:\users\v-yadli\git\MuseBox\RtAudioTest\bin\Debug\RtAudioTest.exe
+c:\users\v-yadli\git\MuseBox\RtAudioTest\bin\Debug\RtAudioTest.pdb
+c:\users\v-yadli\git\MuseBox\RtAudioTest\bin\Debug\rtaudionet.dll
+c:\users\v-yadli\git\MuseBox\RtAudioTest\bin\Debug\rtaudionet.pdb
+c:\users\v-yadli\git\MuseBox\RtAudioTest\obj\x86\Debug\ResolveAssemblyReference.cache
+c:\users\v-yadli\git\MuseBox\RtAudioTest\obj\x86\Debug\RtAudioTest.exe
+c:\users\v-yadli\git\MuseBox\RtAudioTest\obj\x86\Debug\RtAudioTest.pdb

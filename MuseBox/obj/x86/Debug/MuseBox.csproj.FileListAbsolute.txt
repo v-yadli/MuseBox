@@ -1,0 +1,7 @@
+C:\Users\v-yadli\git\MuseBox\MuseBox\bin\Debug\MuseBox.exe
+C:\Users\v-yadli\git\MuseBox\MuseBox\bin\Debug\MuseBox.pdb
+C:\Users\v-yadli\git\MuseBox\MuseBox\bin\Debug\rtaudionet.dll
+C:\Users\v-yadli\git\MuseBox\MuseBox\bin\Debug\rtaudionet.pdb
+C:\Users\v-yadli\git\MuseBox\MuseBox\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\v-yadli\git\MuseBox\MuseBox\obj\x86\Debug\MuseBox.exe
+C:\Users\v-yadli\git\MuseBox\MuseBox\obj\x86\Debug\MuseBox.pdb
