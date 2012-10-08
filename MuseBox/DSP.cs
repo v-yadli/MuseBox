@@ -12,19 +12,19 @@ namespace MuseBox
     /// </summary>
     abstract unsafe class DSP
     {
-        public DSP()
-        {
-        }
-        internal readonly void* OutputBuffer;
+        public virtual void Update();
+        internal float CurrentOutput;
     }
     static class DSPManager
     {
-        static List<List<DSP>> DependencyMatrix = new List<List<DSP>>();
-        protected void InstallDependency(DSP target)
+        public static bool InstallDependency(DSP source, DSP target)
         {
+            return true;
         }
-        protected void RemoveDependency(DSP target)
+        public static bool RemoveDependency(DSP source, DSP target)
         {
+            return true;
         }
+        private static long dspSeqNum = 0;
     }
 }

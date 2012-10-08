@@ -84,6 +84,7 @@ namespace MuseBox
                 Console.WriteLine("\t" + "deviceInfo.sampleRates:\t" + string.Join(";", deviceInfo.sampleRates.Select(x => x.ToString())));
             }
         }
+        public static double Jiffy { get { return 1000.0 / sampleRate; } }
         public static int TimeStamp = 0;
 
         private static uint sampleRate = 44100;
