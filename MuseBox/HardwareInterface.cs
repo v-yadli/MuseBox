@@ -36,19 +36,19 @@ namespace MuseBox
             RtAudioInstance.openStream(
                 new RtAudio.StreamParameters()
                 {
-                    deviceId = 0,
-                    firstChannel = 0,
-                    nChannels = 2
+                    deviceId = RtAudioDeviceID,
+                    firstChannel = RtAudioInputChannelOffset,
+                    nChannels = inputChannelCount
                 },
                 new RtAudio.StreamParameters()
                 {
-                    deviceId = 0,
-                    firstChannel = 0,
-                    nChannels = 2
+                    deviceId = RtAudioDeviceID,
+                    firstChannel = RtAudioOutputChannelOffset,
+                    nChannels = outputChannelCount
                 },
                 RtAudioFormat.RTAUDIO_FLOAT32,
-                44100,
-                512,
+                sampleRate,
+                bufferLength,
                 new RtAudioNetCallback(HardwareInterface.RtAudioCallback)
                 );
             RtAudioInstance.startStream();
@@ -65,7 +65,16 @@ namespace MuseBox
         }
         public static int TimeStamp = 0;
 
-        private static int SampleRate = 44100;
+        private static uint sampleRate = 44100;
+        private static uint bufferLength = 512;
+        private static uint inputChannelCount = 2;
+        private static uint outputChannelCount = 2;
+
+
+        private static uint RtAudioInputChannelOffset = 0;
+        private static uint RtAudioOutputChannelOffset = 0;
+        private static uint RtAudioDeviceID = 0;
+
         private static RtAudioNet.RtAudio RtAudioInstance = new RtAudioNet.RtAudio(RtAudio.Api.WINDOWS_ASIO);
     }
 }
