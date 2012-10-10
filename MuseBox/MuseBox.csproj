@@ -50,7 +50,7 @@
   <ItemGroup>
     <Compile Include="DSP.cs" />
     <Compile Include="EventManager.cs" />
-    <Compile Include="HardwareInterface.cs" />
+    <Compile Include="Hardware.cs" />
     <Compile Include="Memory.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
