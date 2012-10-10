@@ -16,19 +16,25 @@ namespace MuseBox
             Delay l = new Delay();
             Delay r = new Delay();
 
+            Sampler s = new Sampler(2);
+            s.SetBufferLength(88200);//2s
+
             Hardware.InstallDSP(l);
             Hardware.InstallDSP(r);
+            Hardware.InstallDSP(s);
 
-            Hardware.AudioOutput.PlugInput(0, l, 0);
-            Hardware.AudioOutput.PlugInput(1, r, 0);
+            Hardware.AudioOutput.PlugInput(0, s, 0);
+            Hardware.AudioOutput.PlugInput(1, s, 1);
             l.PlugInput(0, Hardware.AudioInput, 0);
             r.PlugInput(0, Hardware.AudioInput, 1);
-            Console.ReadKey();
-            Hardware.StopAudio();
-            Console.ReadKey();
-            Hardware.StartAudio();
-            Console.ReadKey();
-            Hardware.StopAudio();
+            s.PlugInput(0, l, 0);
+            s.PlugInput(1, r, 0);
+            s.StartPlay();
+            while (true)
+            {
+                s.StartRecord();
+                Console.ReadKey();
+            }
         }
     }
 }

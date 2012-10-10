@@ -210,9 +210,15 @@ namespace MuseBox
         private static List<Tuple<DSP, DSP>> DependencyList = new List<Tuple<DSP, DSP>>();
         private static int nextDspId = 0;
         private static object locker = new object();
-
+        /// <summary>
+        /// Jiffy : The length of a sample, measured in milliseconds
+        /// </summary>
         public static double Jiffy { get { return 1000.0 / sampleRate; } }
         public static int TimeStamp = 0;
+        /// <summary>
+        /// CurrentTime : Query the current time, measured in milliseconds
+        /// </summary>
+        public static double CurrentTime { get { return Jiffy * TimeStamp; } }
 
         private static uint sampleRate = 44100;//TODO
         private static uint bufferLength = 512;
