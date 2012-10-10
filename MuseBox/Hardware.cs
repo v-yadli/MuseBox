@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using RtAudioNet;
+using MuseBox.DSP;
 
 namespace MuseBox
 {
@@ -96,8 +97,8 @@ namespace MuseBox
             }
         }
         #endregion//RtAudio
-        #region DSPManager routines
-        public static bool InstallDependency(DSP source, DSP target)
+        #region DeviceManager routines
+        public static bool InstallDependency(Device source, Device target)
         {
             lock (locker)
             {
@@ -107,7 +108,7 @@ namespace MuseBox
                 return true;
             }
         }
-        public static bool RemoveDependency(DSP source, DSP target)
+        public static bool RemoveDependency(Device source, Device target)
         {
             lock (locker)
             {
@@ -117,7 +118,7 @@ namespace MuseBox
                 return true;
             }
         }
-        public static bool InstallDSP(DSP dsp)
+        public static bool InstallDevice(Device dsp)
         {
             lock (locker)
             {
@@ -125,7 +126,7 @@ namespace MuseBox
                 return true;
             }
         }
-        public static bool RemoveDSP(DSP dsp)
+        public static bool RemoveDevice(Device dsp)
         {
             lock (locker)
             {
@@ -150,12 +151,12 @@ namespace MuseBox
         //Caller should hold locker
         private static void UpdateComputationSequence()
         {
-            Dictionary<DSP, int> dspMap = new Dictionary<DSP, int>();
+            Dictionary<Device, int> dspMap = new Dictionary<Device, int>();
             for (int i = 0; i < DeviceList.Count; ++i)
                 dspMap[DeviceList[i]] = i;
             bool[,] graph = new bool[DeviceList.Count, DeviceList.Count];
             bool[] visited = new bool[DeviceList.Count];
-            List<DSP> computedSequence = new List<DSP>();
+            List<Device> computedSequence = new List<Device>();
             foreach (var dep in DependencyList)
             {
                 //Item1 depends on item2
@@ -183,6 +184,11 @@ namespace MuseBox
                 }
             }
             DeviceList = computedSequence;
+            Console.WriteLine("Device computation sequence updated:");
+            foreach (var dev in computedSequence)
+            {
+                Console.WriteLine("\t{0}", dev.GetType());
+            }
         }
         public static unsafe void Update()
         {
@@ -199,16 +205,15 @@ namespace MuseBox
         {
             AudioInput = new AudioInterfaceInput((int)inputChannelCount);
             AudioOutput = new AudioInterfaceOutput((int)outputChannelCount);
-            InstallDSP(AudioInput);
-            InstallDSP(AudioOutput);
+            InstallDevice(AudioInput);
+            InstallDevice(AudioOutput);
         }
 
         public static AudioInterfaceInput AudioInput;
         public static AudioInterfaceOutput AudioOutput;
 
-        private static List<DSP> DeviceList = new List<DSP>();
-        private static List<Tuple<DSP, DSP>> DependencyList = new List<Tuple<DSP, DSP>>();
-        private static int nextDspId = 0;
+        private static List<Device> DeviceList = new List<Device>();
+        private static List<Tuple<Device, Device>> DependencyList = new List<Tuple<Device, Device>>();
         private static object locker = new object();
         /// <summary>
         /// Jiffy : The length of a sample, measured in milliseconds

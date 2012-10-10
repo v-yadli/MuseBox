@@ -48,11 +48,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DSP.cs" />
-    <Compile Include="EventManager.cs" />
+    <Compile Include="DSP\AudioInterface.cs" />
+    <Compile Include="DSP\Delay.cs" />
+    <Compile Include="DSP\Device.cs" />
+    <Compile Include="DSP\Sampler.cs" />
     <Compile Include="Hardware.cs" />
     <Compile Include="Memory.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
