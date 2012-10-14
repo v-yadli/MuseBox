@@ -3,16 +3,38 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MuseBox", "MuseBox\MuseBox.csproj", "{8A482CB6-2905-4101-B2A0-EDD8C428BDD2}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "rtaudionet", "rtaudionet\rtaudionet.vcxproj", "{0A3430CA-D83E-419B-A93E-A8DCD2DCECD1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Debug|Win32 = Debug|Win32
 		Debug|x86 = Debug|x86
+		Release|Mixed Platforms = Release|Mixed Platforms
+		Release|Win32 = Release|Win32
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8A482CB6-2905-4101-B2A0-EDD8C428BDD2}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{8A482CB6-2905-4101-B2A0-EDD8C428BDD2}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{8A482CB6-2905-4101-B2A0-EDD8C428BDD2}.Debug|Win32.ActiveCfg = Debug|x86
 		{8A482CB6-2905-4101-B2A0-EDD8C428BDD2}.Debug|x86.ActiveCfg = Debug|x86
 		{8A482CB6-2905-4101-B2A0-EDD8C428BDD2}.Debug|x86.Build.0 = Debug|x86
+		{8A482CB6-2905-4101-B2A0-EDD8C428BDD2}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{8A482CB6-2905-4101-B2A0-EDD8C428BDD2}.Release|Mixed Platforms.Build.0 = Release|x86
+		{8A482CB6-2905-4101-B2A0-EDD8C428BDD2}.Release|Win32.ActiveCfg = Release|x86
 		{8A482CB6-2905-4101-B2A0-EDD8C428BDD2}.Release|x86.ActiveCfg = Release|x86
 		{8A482CB6-2905-4101-B2A0-EDD8C428BDD2}.Release|x86.Build.0 = Release|x86
+		{0A3430CA-D83E-419B-A93E-A8DCD2DCECD1}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{0A3430CA-D83E-419B-A93E-A8DCD2DCECD1}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{0A3430CA-D83E-419B-A93E-A8DCD2DCECD1}.Debug|Win32.ActiveCfg = Debug|Win32
+		{0A3430CA-D83E-419B-A93E-A8DCD2DCECD1}.Debug|Win32.Build.0 = Debug|Win32
+		{0A3430CA-D83E-419B-A93E-A8DCD2DCECD1}.Debug|x86.ActiveCfg = Debug|Win32
+		{0A3430CA-D83E-419B-A93E-A8DCD2DCECD1}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{0A3430CA-D83E-419B-A93E-A8DCD2DCECD1}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{0A3430CA-D83E-419B-A93E-A8DCD2DCECD1}.Release|Win32.ActiveCfg = Release|Win32
+		{0A3430CA-D83E-419B-A93E-A8DCD2DCECD1}.Release|Win32.Build.0 = Release|Win32
+		{0A3430CA-D83E-419B-A93E-A8DCD2DCECD1}.Release|x86.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

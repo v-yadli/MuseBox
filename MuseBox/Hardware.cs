@@ -43,26 +43,72 @@ namespace MuseBox
 
             return 0;
         }
+        public static unsafe int RtAudioCallback_NULL(IntPtr outputBuffer, IntPtr inputBuffer, uint nFrames, double streamTime, uint status, object value)
+        {
+            //float* outputPtr = (float*)outputBuffer.ToPointer();
+            //float* inputPtr = (float*)inputBuffer.ToPointer();
+
+            //for (uint i = 0; i != nFrames; ++i)
+            //{
+            //    for (int j = 0; j < inputChannelCount; ++j)
+            //        AudioInput.WriteOutput(j, *(inputPtr++));
+            //    Update();
+            //    for (int j = 0; j < outputChannelCount; ++j)
+            //        *(outputPtr++) = AudioOutput.ReadInput(j);
+            //}
+
+            return 0;
+        }
         public static unsafe void StartAudio()
         {
-            RtAudioInstance.openStream(
-                new RtAudio.StreamParameters()
-                {
-                    deviceId = RtAudioDeviceID,
-                    firstChannel = RtAudioInputChannelOffset,
-                    nChannels = inputChannelCount
-                },
-                new RtAudio.StreamParameters()
-                {
-                    deviceId = RtAudioDeviceID,
-                    firstChannel = RtAudioOutputChannelOffset,
-                    nChannels = outputChannelCount
-                },
-                RtAudioFormat.RTAUDIO_FLOAT32,
-                sampleRate,
-                bufferLength,
-                new RtAudioNetCallback(Hardware.RtAudioCallback)
-                );
+            Test();
+
+            Console.ReadKey();
+
+            try
+            {
+                RtAudioInstance.openStream(
+                    new RtAudio.StreamParameters()
+                    {
+                        deviceId = RtAudioDeviceID,
+                        firstChannel = RtAudioInputChannelOffset,
+                        nChannels = inputChannelCount
+                    },
+                    new RtAudio.StreamParameters()
+                    {
+                        deviceId = RtAudioDeviceID,
+                        firstChannel = RtAudioOutputChannelOffset,
+                        nChannels = outputChannelCount
+                    },
+                    RtAudioFormat.RTAUDIO_FLOAT32,
+                    sampleRate,
+                    bufferLength,
+                    new RtAudioNetCallback(Hardware.RtAudioCallback)
+                    );
+            }
+            catch (Exception)
+            {
+                bufferLength = (uint)RtAudioInstance.GetSuggestedBufferLength();
+                Console.WriteLine("Oops, buffer length altered to {0}, try again.", bufferLength);
+                RtAudioInstance.openStream(
+                    new RtAudio.StreamParameters()
+                    {
+                        deviceId = RtAudioDeviceID,
+                        firstChannel = RtAudioInputChannelOffset,
+                        nChannels = inputChannelCount
+                    },
+                    new RtAudio.StreamParameters()
+                    {
+                        deviceId = RtAudioDeviceID,
+                        firstChannel = RtAudioOutputChannelOffset,
+                        nChannels = outputChannelCount
+                    },
+                    RtAudioFormat.RTAUDIO_FLOAT32,
+                    sampleRate,
+                    bufferLength,
+                    new RtAudioNetCallback(Hardware.RtAudioCallback)
+                    );
+            }
             RtAudioInstance.startStream();
         }
         public static unsafe void StopAudio()
@@ -226,13 +272,13 @@ namespace MuseBox
         public static double CurrentTime { get { return Jiffy * TimeStamp; } }
 
         private static uint sampleRate = 44100;//TODO
-        private static uint bufferLength = 512;
+        private static uint bufferLength = 480;
         private static uint inputChannelCount = 2;
         private static uint outputChannelCount = 2;
 
         private static uint RtAudioInputChannelOffset = 0;
         private static uint RtAudioOutputChannelOffset = 0;
-        private static uint RtAudioDeviceID = 0;
+        private static uint RtAudioDeviceID = 1;
 
         private static RtAudioNet.RtAudio RtAudioInstance = new RtAudioNet.RtAudio(RtAudio.Api.WINDOWS_ASIO);
     }

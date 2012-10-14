@@ -36,9 +36,6 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="rtaudionet, Version=1.0.4209.21890, Culture=neutral, processorArchitecture=x86">
-      <HintPath>..\bin\rtaudionet.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -56,6 +53,12 @@
     <Compile Include="Memory.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\rtaudionet\rtaudionet.vcxproj">
+      <Project>{0A3430CA-D83E-419B-A93E-A8DCD2DCECD1}</Project>
+      <Name>rtaudionet</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
