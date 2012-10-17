@@ -1,8 +1,0 @@
-﻿= MuseBox -- A Digital Audio Workstation for song writers =
-
-When I write a song, I don't want to feel like sitting inside a studio and using those
-_production tools_. Those big companies make this kind of tools. But I want something else.
-
-Something fast, intellegent, fun, beautiful.
-
-Please refer to MuseBox.pdf for more details!
