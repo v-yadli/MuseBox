@@ -29,6 +29,7 @@ public:
         currentCursor = (currentCursor + 1) % delaySampleCount;
 
     }
+    virtual QString DeviceType(){return "DDL-001";}
 private:
     double* delayBuffer;
     int delaySampleCount;

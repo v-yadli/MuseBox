@@ -60,8 +60,6 @@ void Hardware::Init()
 
     AudioInput = new AudioInterfaceInput(InputDeviceParameters.nChannels);
     AudioOutput = new AudioInterfaceOutput(OutputDeviceParameters.nChannels);
-    InstallDevice(AudioInput);
-    InstallDevice(AudioOutput);
 }
 
 void Hardware::DeInit()
@@ -249,9 +247,14 @@ int Hardware::rtAudioCallback(void* outputBuffer, void* inputBuffer, uint nFrame
     return 0;
 }
 //Source depends on target, sounds weird isn't it...
+//Note that if a device is not registered as a global device, the dependency won't be count in.
 bool Hardware::InstallDependency(Device* source, Device* target)
 {
     locker.lock();
+    if(!DeviceList.contains(source))
+        return false;
+    if(!DeviceList.contains(target))
+        return false;
     DeviceTuple t(source, target);
     DependencyList.push_back(t);
     UpdateComputationSequence();
@@ -293,7 +296,7 @@ bool Hardware::RemoveDevice(Device* dsp)
         {
             if (dsp == DependencyList[i].Target)
             {
-                DependencyList[i].Source->OnInputDeviceRemoved(dsp);
+                DependencyList[i].Source->__RemoveInputDevice__(dsp);
             }
             DependencyList.remove(i);
             continue;
@@ -348,7 +351,7 @@ void Hardware::UpdateComputationSequence()
     qDebug()<<"Device computation sequence updated:";
     foreach (Device* dev , computedSequence)
     {
-        qDebug()<<dev->DeviceType();
+        qDebug()<<(dev->DeviceType());
     }
     delete[] visited;
     for(int i=0;i<DeviceList.count();++i)

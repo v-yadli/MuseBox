@@ -6,7 +6,8 @@ Delay::Delay() : Device(1,1)
     DryRatio = 0.5;
     Damping = 0.7;
     delayBuffer = NULL;
-    SetDelayByBPM(120,0.75);
+//    SetDelayByBPM(120,0.75);
+    SetDelayByTime(5);
 }
 
 Delay::~Delay()

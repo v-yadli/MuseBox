@@ -2,6 +2,7 @@
 #define AUDIOINTERFACE_H
 
 #include "device.h"
+#include <QString>
 
 class AudioInterfaceInput : public Device
 {

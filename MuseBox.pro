@@ -40,7 +40,13 @@ SOURCES += main.cpp \
     DSP/devicetuple.cpp \
     DSP/device.cpp \
     DSP/audiointerface.cpp \
-    DSP/delay.cpp
+    DSP/delay.cpp \
+    DSP/pattern.cpp \
+    DSP/transpose.cpp \
+    DSP/track.cpp \
+    DSP/mixer.cpp \
+    DSP/mixerchannel.cpp \
+    DSP/splitter.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -73,7 +79,13 @@ HEADERS += \
     DSP/devicetuple.h \
     DSP/device.h \
     DSP/audiointerface.h \
-    DSP/delay.h
+    DSP/delay.h \
+    DSP/pattern.h \
+    DSP/transpose.h \
+    DSP/track.h \
+    DSP/mixer.h \
+    DSP/mixerchannel.h \
+    DSP/splitter.h
 
 FORMS += \
     audioconfigurationdialog.ui

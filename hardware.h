@@ -39,6 +39,9 @@ public:
     static unsigned int SampleRate;
     static unsigned int BufferFrames;
 
+    static void Lock(){locker.lock();}
+    static void Unlock(){locker.unlock();}
+
 
     static double Jiffy()
     {
@@ -68,6 +71,7 @@ private:
                                double streamTime,
                                RtAudioStreamStatus status,
                                void *userData);
+    //Always lock up the hardware when doing modifications to some values!
     static QMutex locker;
 
 };

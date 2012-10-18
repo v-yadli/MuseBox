@@ -21,8 +21,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     Hardware::Init();
 
     Delay *l = new Delay(), *r = new Delay();
-    Hardware::InstallDevice(l);
-    Hardware::InstallDevice(r);
 
     Hardware::AudioOutput->PlugInput(0,l,0);
     Hardware::AudioOutput->PlugInput(1,r,0);

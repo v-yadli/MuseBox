@@ -1,16 +1,15 @@
 #ifndef DEVICE_H
 #define DEVICE_H
 
-#include <QObject>
 #include "endpoint.h"
+#include <QVector>
+#include <QString>
 
-class Device : public QObject
+class Device
 {
-    Q_OBJECT
 public:
     explicit Device(unsigned int InputChannelCount,
-                    unsigned int OutputChannelCount,
-                    QObject *parent = 0);
+                    unsigned int OutputChannelCount);
     ~Device()
     {
         for(unsigned int i=0;i<OutputChannelCount;++i)
@@ -23,22 +22,23 @@ public:
     }
     void PlugInput(int channel, Device* sourceDSP, int sourceChannel);
     void UnplugInput(int channel);
-    void OnInputDeviceRemoved(Device*);
     double ReadInput(int);
     void WriteOutput(int,double);
+    void AddInputChannel(int channelCount);
+    void RemoveInputChannel(int Index, int count);
     virtual void Update();
+    virtual void OnInputDeviceRemoved(QVector<int>){}
     virtual QString DeviceType(){return "Abstract DSP";}
 
-signals:
-    
-public slots:
-
+    friend class Hardware;
+protected:
+    unsigned int InputChannelCount;
+    unsigned int OutputChannelCount;
 private:
+    void __RemoveInputDevice__(Device*);
     EndPoint** InputChannels;
     EndPoint** OutputChannels;
     Device**   InputChannelProviders;
-    unsigned int InputChannelCount;
-    unsigned int OutputChannelCount;
 };
 
 #endif // DEVICE_H
