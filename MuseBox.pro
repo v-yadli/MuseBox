@@ -40,7 +40,6 @@ SOURCES += main.cpp \
     DSP/devicetuple.cpp \
     DSP/device.cpp \
     DSP/audiointerface.cpp \
-    DSP/delay.cpp \
     DSP/pattern.cpp \
     DSP/transpose.cpp \
     DSP/track.cpp \
@@ -79,7 +78,6 @@ HEADERS += \
     DSP/devicetuple.h \
     DSP/device.h \
     DSP/audiointerface.h \
-    DSP/delay.h \
     DSP/pattern.h \
     DSP/transpose.h \
     DSP/track.h \
@@ -87,7 +85,8 @@ HEADERS += \
     DSP/mixerchannel.h \
     DSP/splitter.h \
     DSP/const.h \
-    DSP/stereoep.h
+    DSP/stereoep.h \
+    DSP/patternnote.h
 
 FORMS += \
     audioconfigurationdialog.ui

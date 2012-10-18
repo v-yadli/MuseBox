@@ -23,6 +23,10 @@ QMutex Hardware::locker;
 AudioInterfaceInput* Hardware::AudioInput;
 AudioInterfaceOutput* Hardware::AudioOutput;
 QVector<RtAudio::DeviceInfo> Hardware::audioDeviceList;
+StereoMixer* Hardware::MainMixer;
+Transpose* Hardware::TransposeMachine;
+bool Hardware::Monitor = true;
+
 
 unsigned int ProbeDeviceId(QString devName)
 {
@@ -60,17 +64,31 @@ void Hardware::Init()
 
     AudioInput = new AudioInterfaceInput(InputDeviceParameters.nChannels);
     AudioOutput = new AudioInterfaceOutput(OutputDeviceParameters.nChannels);
-    Hardware::InstallDevice(AudioInput);
     Hardware::InstallDevice(AudioOutput);
+    MainMixer = new StereoMixer();
+    TransposeMachine = new Transpose(120);
+    Hardware::InstallDevice(MainMixer);
+    Hardware::InstallDevice(TransposeMachine);
+    AudioOutput->PlugInput(0,MainMixer,0);
+    AudioOutput->PlugInput(0,MainMixer,1);
+}
+
+//Should be called in Update() procedures
+double Hardware::ReadAudioInput(int channel)
+{
+    return AudioInput->OutputChannels[channel]->Data;
 }
 
 void Hardware::DeInit()
 {
     SaveConfig();
-    delete rtAudioInstance;
-    rtAudioInstance = NULL;
+    //StopAudio();
+    //delete rtAudioInstance;
+    //rtAudioInstance = NULL;
     delete AudioInput;
-    delete AudioOutput;
+    RemoveDevice(AudioOutput);
+    RemoveDevice(MainMixer);
+    RemoveDevice(TransposeMachine);
 }
 
 //{{{ Config related
@@ -243,7 +261,12 @@ int Hardware::rtAudioCallback(void* outputBuffer, void* inputBuffer, uint nFrame
             AudioInput->WriteOutput(j, *(inputPtr++));
         Update();
         for (unsigned int j = 0; j < OutputDeviceParameters.nChannels; ++j)
-            *(outputPtr++) = AudioOutput->ReadInput(j);
+        {
+            double val = AudioOutput->ReadInput(j);
+            if(j < 2)
+                val += TransposeMachine->OutputChannels[j]->Data;
+            *(outputPtr++) = val;
+        }
     }
 
     return 0;

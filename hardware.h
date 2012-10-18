@@ -7,6 +7,8 @@
 #include "DSP/device.h"
 #include "DSP/devicetuple.h"
 #include "DSP/audiointerface.h"
+#include "DSP/transpose.h"
+#include "DSP/mixer.h"
 
 class Hardware
 {
@@ -39,6 +41,8 @@ public:
     static unsigned int SampleRate;
     static unsigned int BufferFrames;
 
+    static double ReadAudioInput(int channel);
+
     static void Lock(){locker.lock();}
     static void Unlock(){locker.unlock();}
 
@@ -55,6 +59,10 @@ public:
     static AudioInterfaceOutput* AudioOutput;
     static QVector<RtAudio::DeviceInfo> audioDeviceList;
 
+    static Transpose* TransposeMachine;
+    static StereoMixer* MainMixer;
+
+    static bool Monitor;
 
 private:
     static RtAudio* rtAudioInstance;
