@@ -17,7 +17,6 @@ Device::Device(unsigned int InputChannelCount, unsigned int OutputChannelCount)
         InputChannels[i] = NULL;
         InputChannelProviders[i] = NULL;
     }
-    Hardware::InstallDevice(this);
 }
 void Device::PlugInput(int channel, Device *sourceDsp, int sourceChannel)
 {
@@ -33,7 +32,7 @@ void Device::UnplugInput(int channel)
     InputChannels[channel] = NULL;
     InputChannelProviders[channel] = NULL;
 }
-
+//Only on public devices.
 void Device::__RemoveInputDevice__(Device* dsp)
 {
     bool InputDeviceExist = false;
@@ -102,7 +101,7 @@ void Device::RemoveInputChannel(int Index, int count)
     InputChannels = newICp;
     InputChannelProviders = newDp;
 
-    InputChannelCount -+ count;
+    InputChannelCount -= count;
 }
 
 void Device::Update()

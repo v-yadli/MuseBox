@@ -85,7 +85,9 @@ HEADERS += \
     DSP/track.h \
     DSP/mixer.h \
     DSP/mixerchannel.h \
-    DSP/splitter.h
+    DSP/splitter.h \
+    DSP/const.h \
+    DSP/stereoep.h
 
 FORMS += \
     audioconfigurationdialog.ui

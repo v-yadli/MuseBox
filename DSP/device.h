@@ -31,13 +31,15 @@ public:
     virtual QString DeviceType(){return "Abstract DSP";}
 
     friend class Hardware;
-protected:
+
     unsigned int InputChannelCount;
     unsigned int OutputChannelCount;
-private:
-    void __RemoveInputDevice__(Device*);
     EndPoint** InputChannels;
     EndPoint** OutputChannels;
+
+protected:
+private:
+    void __RemoveInputDevice__(Device*);
     Device**   InputChannelProviders;
 };
 

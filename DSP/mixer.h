@@ -3,23 +3,27 @@
 #include "device.h"
 #include "mixerchannel.h"
 #include "splitter.h"
+#include "const.h"
 #include <QVector>
+#include "stereoep.h"
 //Stereo mixer.
-class Mixer : public Device
+
+class StereoMixer : public Device
 {
 public:
-    Mixer();
+    StereoMixer();
     virtual void OnInputDeviceRemoved(QVector<int>);
+    ~StereoMixer();
+    virtual QString DeviceType(){return "StereoMixer";}
+    virtual void Update();
+    MixerChannel* AddInputDevice(Device* dev);
+
 private:
     QVector<MixerChannel*> InputChannels;
     QVector<MixerChannel*> SendChannels;
 
-    //The mappers only store a mono channel number.
-    //If it's 0, it means {0,1}
-    //If it's 6, it means {6,7}
-    //It can never be odd.
-    QVector<int>           InputChannelMapper;
-    QVector<int>           SendChannelMapper;
+    QVector<StereoEP*> SendEPs;
+    QVector<StereoEP*> InputEPs;
 };
 
 #endif // MIXER_H

@@ -60,6 +60,8 @@ void Hardware::Init()
 
     AudioInput = new AudioInterfaceInput(InputDeviceParameters.nChannels);
     AudioOutput = new AudioInterfaceOutput(OutputDeviceParameters.nChannels);
+    Hardware::InstallDevice(AudioInput);
+    Hardware::InstallDevice(AudioOutput);
 }
 
 void Hardware::DeInit()
