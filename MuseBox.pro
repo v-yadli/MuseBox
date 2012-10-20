@@ -4,7 +4,7 @@ folder_01.target = qml
 DEPLOYMENTFOLDERS = folder_01
 
 # Additional import path used to resolve QML modules in Creator's code model
-QML_IMPORT_PATH =
+QML_IMPORT_PATH = qml/MuseBox
 
 symbian:TARGET.UID3 = 0xE14BCCBF
 
@@ -35,7 +35,6 @@ SOURCES += main.cpp \
     include/asiodrivers.cpp \
     include/asio.cpp \
     audioconfigurationdialog.cpp \
-    qmlbridge.cpp \
     DSP/endpoint.cpp \
     DSP/devicetuple.cpp \
     DSP/device.cpp \
@@ -45,7 +44,8 @@ SOURCES += main.cpp \
     DSP/track.cpp \
     DSP/mixer.cpp \
     DSP/mixerchannel.cpp \
-    DSP/splitter.cpp
+    DSP/splitter.cpp \
+    musebox.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -73,7 +73,6 @@ HEADERS += \
     include/asiodrivers.h \
     include/asio.h \
     audioconfigurationdialog.h \
-    qmlbridge.h \
     DSP/endpoint.h \
     DSP/devicetuple.h \
     DSP/device.h \
@@ -86,7 +85,8 @@ HEADERS += \
     DSP/splitter.h \
     DSP/const.h \
     DSP/stereoep.h \
-    DSP/patternnote.h
+    DSP/patternnote.h \
+    musebox.h
 
 FORMS += \
     audioconfigurationdialog.ui

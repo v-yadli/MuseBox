@@ -29,6 +29,9 @@ public:
     bool Click;
     double ClickLevel;
 
+    int BarCount; //How many beats in a bar
+    int BeatCount; //How many units in a beat
+
     int LoopStart;
     int LoopEnd;
     bool Loop;
@@ -46,6 +49,12 @@ public:
 
     //Will be triggered when a user manually changed position, or loop triggered
     bool PositionJumped;
+
+    void Play();
+    void Stop();
+    void SetRecord(bool flag);
+    void TogglePlayStop();
+
 };
 
 #endif // TRANSPOSE_H

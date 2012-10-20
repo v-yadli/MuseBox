@@ -2,7 +2,7 @@
 #include <QDeclarativeContext>
 #include "qmlapplicationviewer.h"
 #include "hardware.h"
-#include "qmlbridge.h"
+#include "musebox.h"
 
 Q_DECL_EXPORT int main(int argc, char *argv[])
 {
@@ -12,8 +12,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QCoreApplication::setOrganizationDomain("yaldi.net");
 
     QDeclarativeView view;
-    QMLBridge bridge;
-    view.rootContext()->setContextProperty("bridge", &bridge);
+    MuseBox museBox;
+    view.rootContext()->setContextProperty("musebox", &museBox);
 
     view.setSource(QUrl::fromLocalFile("qml/MuseBox/main.qml"));
     view.show();

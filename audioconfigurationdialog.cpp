@@ -38,8 +38,14 @@ AudioConfigurationDialog::~AudioConfigurationDialog()
 void AudioConfigurationDialog::audioInterfaceChanged(int idx)
 {
     ui->sampleRateComboBox->clear();
+    int selected = 0;
     for(int i=0;i<devices[idx].sampleRates.size();++i)
+    {
         ui->sampleRateComboBox->addItem(QString("%0").arg(devices[idx].sampleRates[i]));
+        if(devices[idx].sampleRates[i] == Hardware::SampleRate)
+            selected = i;
+    }
+    ui->sampleRateComboBox->setCurrentIndex(selected);
 }
 
 void AudioConfigurationDialog::ApplyClicked()

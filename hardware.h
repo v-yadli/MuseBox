@@ -84,4 +84,19 @@ private:
 
 };
 
+class _HWLock
+{
+    public:
+    _HWLock()
+    {
+        Hardware::Lock();
+    }
+    ~_HWLock()
+    {
+        Hardware::Unlock();
+    }
+};
+
+#define HWLOCK _HWLock lock;
+
 #endif // HARDWARE_H
