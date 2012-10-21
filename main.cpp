@@ -11,14 +11,15 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QCoreApplication::setOrganizationName("Yadli studio");
     QCoreApplication::setOrganizationDomain("yaldi.net");
 
-    QDeclarativeView view;
+    QmlApplicationViewer view;
     MuseBox museBox;
     view.rootContext()->setContextProperty("musebox", &museBox);
 
     view.setSource(QUrl::fromLocalFile("qml/MuseBox/main.qml"));
-    view.show();
+    view.setResizeMode(QDeclarativeView::SizeRootObjectToView);
+    museBox.setCentralWidget(&view);
+    museBox.show();
     Hardware::Init();
-
     Hardware::StartAudio();
 
 

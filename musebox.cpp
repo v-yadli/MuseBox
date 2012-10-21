@@ -1,6 +1,6 @@
 #include "musebox.h"
 
-MuseBox::MuseBox(QObject *parent) :
-    QObject(parent)
+MuseBox::MuseBox(QWidget *parent) :
+    QMainWindow(parent)
 {
 }

@@ -82,13 +82,15 @@ double Hardware::ReadAudioInput(int channel)
 void Hardware::DeInit()
 {
     SaveConfig();
-    //StopAudio();
+    //XXX: Have some problem here.
+    //When StopAudio and destruction are performed, the program frezzes
+    StopAudio();
     //delete rtAudioInstance;
     //rtAudioInstance = NULL;
-    delete AudioInput;
-    RemoveDevice(AudioOutput);
-    RemoveDevice(MainMixer);
-    RemoveDevice(TransposeMachine);
+    //delete AudioInput;
+    //RemoveDevice(AudioOutput);
+    //RemoveDevice(MainMixer);
+    //RemoveDevice(TransposeMachine);
 }
 
 //{{{ Config related
@@ -229,6 +231,7 @@ void Hardware::UpdateSettings(int deviceID, RtAudio::DeviceInfo devInfo, unsigne
     BufferFrames = bufferSize;
 
     InputDeviceName = OutputDeviceName = QString(devInfo.name.c_str());
+    TransposeMachine->SetBPM(TransposeMachine->BPM);
     locker.unlock();
 
     StartAudio();

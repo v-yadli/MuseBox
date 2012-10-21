@@ -21,7 +21,7 @@ public:
     virtual void Update();
     virtual QString DeviceType(){return "Transpose";}
     void SetBPM(int BPM);
-    bool Crossing(double time, double delta, double unit){return ((int)(time/unit)!=(int)((time+delta)/unit));}
+    bool Crossing(double time, double delta, double unit){return ((int)((time-delta)/unit)!=(int)((time)/unit));}
 
     int BPM;
     bool Playing;
@@ -36,7 +36,10 @@ public:
     int LoopEnd;
     bool Loop;
     double Speed;
+
+    ////////////////////////////////////
     double Time;//Measured in samples
+    ////////////////////////////////////
 
     Pattern* BarSound;
     Pattern* BeatSound;
@@ -46,6 +49,34 @@ public:
 
     double barTime;
     double beatTime;
+
+    double getTime();//Measured in seconds
+
+    int getBar()
+    {
+        return Time / barTime;
+    }
+    int getBeat()
+    {
+        return (Time - barTime * getBar()) / beatTime;
+    }
+    int getMinute()
+    {
+        return getTime() / 60;
+    }
+    int getSecond()
+    {
+        return getTime() - getMinute()*60;
+    }
+    int getMillisecond()
+    {
+        return (getTime() - getMinute()*60 - getSecond()) * 1000;
+    }
+    double getPositionInBeat()
+    {
+        double bt = (Time - getBar()*barTime);
+        return (bt - ((int)(bt / beatTime))*beatTime) / beatTime;
+    }
 
     //Will be triggered when a user manually changed position, or loop triggered
     bool PositionJumped;

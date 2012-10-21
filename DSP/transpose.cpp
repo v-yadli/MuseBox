@@ -11,9 +11,9 @@ Transpose::Transpose(int BPM)://A transpose is just a transpose. It has no input
     SetBPM(BPM);
     Recording = false;
     Playing = false;
-    Click = true;
+    Click = false;
     ClickLevel = 0.3;
-    Loop = false;
+    Loop = true;
     Speed = 1.0;
 
     LoopStart = 0;
@@ -28,14 +28,19 @@ Transpose::Transpose(int BPM)://A transpose is just a transpose. It has no input
 
     for(int i=0;i<2000;++i)
     {
-        BarSound->Put(0,sin(i/8));
-        BeatSound->Put(0,sin(i/16));
+        BarSound->Put(0,sin((double)(i/8)));
+        BeatSound->Put(0,sin((double)(i/16)));
     }
 }
 
 void Transpose::Play()
 {
     Playing = true;
+}
+
+double Transpose::getTime()
+{
+    return Time / Hardware::SampleRate;
 }
 
 void Transpose::Stop()
@@ -85,7 +90,20 @@ void Transpose::Update()
     }
 
     if(Playing)
-        Time += Speed;
+    {
+        if(Loop) {
+            if(Time < LoopEnd && Time + Speed >= LoopEnd)
+            {
+                Time = LoopStart;
+                PositionJumped = true;//TODO better signal emitting, AKA message bus
+            }else
+                Time += Speed;
+        }else{
+            Time += Speed;
+        }
+        if(Speed != 1.0 && fabs(Speed) < 8)
+            Speed *= 1.000015;
+    }
 }
 
 double Transpose::SampleToBeats(double sampleCount)
