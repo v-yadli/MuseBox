@@ -38,7 +38,7 @@ Rectangle {
 
     Timer{
         id:guiTimer
-        interval: 50
+        interval: 30
         running:true
         repeat: true
         onTriggered: {
@@ -50,7 +50,7 @@ Rectangle {
             var beatPos = musebox.getPositionInBeat()
 
             transpose.updateTimeAndBeat(min,sec,mil,bar,beat)
-            trackFlip.updateTrackViewCurrentPosition(bar,beat,beatPos)
+            trackView.setCurrentPos(bar,beat,beatPos)
 
             transpose.updateMasterDbMeter(musebox.masterL(), musebox.masterR())
         }
@@ -104,11 +104,5 @@ Rectangle {
             transpose.togglePlay()
             event.accepted = true
         }
-    }
-
-    function addTrack()
-    {
-        //track header
-        //track view
     }
 }

@@ -41,9 +41,6 @@ Rectangle {
 
     function update(ldB,rdB)// range from -100 to 0
     {
-        console.log(ldB)
-        console.log(rdB)
-
         ldB = Math.log(ldB) / Math.LOG10E
         rdB = Math.log(rdB) / Math.LOG10E
 

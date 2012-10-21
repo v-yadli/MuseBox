@@ -17,10 +17,13 @@ public:
     virtual QString DeviceType(){return "StereoMixer";}
     virtual void Update();
     MixerChannel* AddInputDevice(Device* dev);
+    MixerChannel* InsertInputDevice(int index,Device* dev);
 
 private:
-    QVector<MixerChannel*> InputChannels;
-    QVector<MixerChannel*> SendChannels;
+    MixerChannel* masterChannel;
+
+    QVector<MixerChannel*> InputMixerChannels;
+    QVector<MixerChannel*> SendMixerChannels;
 
     QVector<StereoEP*> SendEPs;
     QVector<StereoEP*> InputEPs;

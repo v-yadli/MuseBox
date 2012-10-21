@@ -8,6 +8,7 @@ class MixerChannel : public Device
 {
 public:
     MixerChannel();
+    ~MixerChannel();
     bool pre;
     double fader;
     double panning;

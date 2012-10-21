@@ -5,8 +5,9 @@
 struct PatternNote
 {
     Pattern* pattern;
-    int offset;
-    int length;
+    int offsetInPattern;
+    int lengthInPattern;
+    int start;//The start point in the song
 };
 
 #endif // PATTERNNOTE_H

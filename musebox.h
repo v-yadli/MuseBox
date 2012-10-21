@@ -7,6 +7,7 @@
 #include "hardware.h"
 #include <QDebug>
 #include <QMainWindow>
+#include <DataModel/trackmodel.h>
 
 //Main MuseBox class. Handles Track addition/remove logic, interaction between audio engine and GUI, and file load/save.
 
@@ -27,7 +28,9 @@ public:
     void MoveTrack(int from, int to);
     Track* GetTrack(int idx);
 
-    bool playStateBeforeMove;
+    bool playStateBeforeMove;//Used to recover play state after a FF/RW action
+    TrackModel trackModel;
+
 
     Q_INVOKABLE void resetAudio()
     {
@@ -93,7 +96,6 @@ public:
         Hardware::TransposeMachine->Loop = loop;
     }
 
-
     Q_INVOKABLE void beginUpdateGUI()
     {
         Hardware::Lock();
@@ -103,6 +105,8 @@ public:
         Hardware::Unlock();
     }
 
+
+    //TODO expose TransposeMachine to QML to reduce call counts
     Q_INVOKABLE int getBar()
     {
         return Hardware::TransposeMachine->getBar();

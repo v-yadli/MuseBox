@@ -26,6 +26,7 @@ public:
     void WriteInput(int channel,double val);
     void WriteOutput(int,double);
     void AddInputChannel(int channelCount);
+    void InsertInputChannel(int index,int channelCount);
     void RemoveInputChannel(int Index, int count);
     virtual void Update();
     virtual void OnInputDeviceRemoved(QVector<int>){}

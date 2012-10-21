@@ -9,18 +9,18 @@ StereoMixer::StereoMixer():
         StereoEP* e = new StereoEP();
         d->InputChannels[0] = &e->l;
         d->InputChannels[1] = &e->r;
-        SendChannels.push_back(d);
+        SendMixerChannels.push_back(d);
         SendEPs.push_back(e);
     }
 }
 
 StereoMixer::~StereoMixer()
 {
-    foreach(MixerChannel* cp, InputChannels)
+    foreach(MixerChannel* cp, InputMixerChannels)
     {
         delete cp;
     }
-    foreach(MixerChannel* cp, SendChannels)
+    foreach(MixerChannel* cp, SendMixerChannels)
     {
         delete cp;
     }
@@ -36,26 +36,37 @@ StereoMixer::~StereoMixer()
 
 MixerChannel* StereoMixer::AddInputDevice(Device *dev)
 {
-    Q_ASSERT(dev->InputChannelCount <= 2);
-    Q_ASSERT(dev->InputChannelCount > 0);
+    return InsertInputDevice(InputMixerChannels.count(),dev);
+}
+
+MixerChannel *StereoMixer::InsertInputDevice(int index,Device *dev)
+{
+    //dev-OutputChannel->EP-InputChannel->Chain to Insert FX->LastInsertOutput->Mix->Out
+    Q_ASSERT(dev->OutputChannelCount <= 2);
+    Q_ASSERT(dev->OutputChannelCount > 0);
 
     MixerChannel* d = new MixerChannel();
     StereoEP* e = new StereoEP();
-    switch(dev->InputChannelCount)
+    InputMixerChannels.insert(index,d);
+    InputEPs.insert(index,e);
+    InsertInputChannel(index,2);
+    switch(dev->OutputChannelCount)
     {
     case 1:
         d->InputChannels[0] = &e->l;
         d->InputChannels[1] = &e->l;
+        PlugInput(index,dev,0);
+        PlugInput(index+1,dev,0);
         break;
     case 2:
         d->InputChannels[0] = &e->l;
         d->InputChannels[1] = &e->r;
+        PlugInput(index,dev,0);
+        PlugInput(index+1,dev,1);
         break;
     }
-    InputChannels.push_back(d);
-    InputEPs.push_back(e);
-
     return (MixerChannel*)d;
+
 }
 
 //removedChannels are guaranteed to be sorted ascendant
@@ -66,10 +77,17 @@ void StereoMixer::OnInputDeviceRemoved(QVector<int> removedChannels)
         if(rmid % 2 != 0)
             continue;
         int cid = rmid / 2;
-        delete InputChannels[cid];
-        InputChannels.remove(cid);
+        delete InputMixerChannels[cid];
+        InputMixerChannels.remove(cid);
         delete InputEPs[cid];
         InputEPs.remove(cid);
+    }
+    for(int i=removedChannels.count()-1;i>=0;--i)
+    {
+        int rmid = removedChannels[i];
+        if(rmid % 2 != 0)
+            continue;
+        RemoveInputChannel(rmid,2);
     }
  // If send count is not fixed, code is like this...
  //   for(int i=removedChannels.count()-1;i>=0;--i)
@@ -104,41 +122,41 @@ void StereoMixer::OnInputDeviceRemoved(QVector<int> removedChannels)
 
 void StereoMixer::Update()
 {
-    for(int i=0;i<SendChannels.count();++i)
+    for(int i=0;i<SendMixerChannels.count();++i)
     {
         SendEPs[i]->l.Data = 0.0;
         SendEPs[i]->r.Data = 0.0;
     }
     double l = 0.0, r = 0.0;
-    for(int i=0;i<InputChannels.count();++i)
+    for(int i=0;i<InputMixerChannels.count();++i)
     {
         InputEPs[i]->l.Data = ReadInput(i*2);
         InputEPs[i]->r.Data = ReadInput(i*2+1);
-        if(InputChannels[i]->pre)
+        if(InputMixerChannels[i]->pre)
         {
             for(int j=0;j<STEREO_MIXER_SEND_NUMBER;++j)
             {
-                SendEPs[j]->l.Data += InputChannels[i]->ReadInput(0) * InputChannels[i]->SendLevel[j];
-                SendEPs[j]->r.Data += InputChannels[i]->ReadInput(1) * InputChannels[i]->SendLevel[j];
+                SendEPs[j]->l.Data += InputMixerChannels[i]->ReadInput(0) * InputMixerChannels[i]->SendLevel[j];
+                SendEPs[j]->r.Data += InputMixerChannels[i]->ReadInput(1) * InputMixerChannels[i]->SendLevel[j];
             }
         }
-        InputChannels[i]->Update();
-        if(!InputChannels[i]->pre)
+        InputMixerChannels[i]->Update();
+        if(!InputMixerChannels[i]->pre)
         {
             for(int j=0;j<STEREO_MIXER_SEND_NUMBER;++j)
             {
-                SendEPs[j]->l.Data += InputChannels[i]->ReadInput(0) * InputChannels[i]->SendLevel[j];
-                SendEPs[j]->r.Data += InputChannels[i]->ReadInput(1) * InputChannels[i]->SendLevel[j];
+                SendEPs[j]->l.Data += InputMixerChannels[i]->ReadInput(0) * InputMixerChannels[i]->SendLevel[j];
+                SendEPs[j]->r.Data += InputMixerChannels[i]->ReadInput(1) * InputMixerChannels[i]->SendLevel[j];
             }
         }
 
-        l += InputChannels[i]->OutputChannels[0]->Data;
-        r += InputChannels[i]->OutputChannels[1]->Data;
+        l += InputMixerChannels[i]->OutputChannels[0]->Data;
+        r += InputMixerChannels[i]->OutputChannels[1]->Data;
     }
     for(int i=0;i<STEREO_MIXER_SEND_NUMBER;++i)
     {
-        SendChannels[i]->Update();
-        l += SendChannels[i]->OutputChannels[0]->Data;
-        r += SendChannels[i]->OutputChannels[1]->Data;
+        SendMixerChannels[i]->Update();
+        l += SendMixerChannels[i]->OutputChannels[0]->Data;
+        r += SendMixerChannels[i]->OutputChannels[1]->Data;
     }
 }

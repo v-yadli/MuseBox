@@ -8,6 +8,12 @@ MixerChannel::MixerChannel():
     panning = 0.0;
 }
 
+MixerChannel::~MixerChannel()
+{
+    foreach(Device* dev, InsertFX)
+        delete dev;
+}
+
 void MixerChannel::Update()
 {
     double l,r;

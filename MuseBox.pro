@@ -45,7 +45,8 @@ SOURCES += main.cpp \
     DSP/mixer.cpp \
     DSP/mixerchannel.cpp \
     DSP/splitter.cpp \
-    musebox.cpp
+    musebox.cpp \
+    DataModel/trackmodel.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -86,7 +87,8 @@ HEADERS += \
     DSP/const.h \
     DSP/stereoep.h \
     DSP/patternnote.h \
-    musebox.h
+    musebox.h \
+    DataModel/trackmodel.h
 
 FORMS += \
     audioconfigurationdialog.ui

@@ -9,7 +9,7 @@ Rectangle {
 
     property int unitCountInBeat : 3
     property int beatCountInBar : 3
-    property int barLength : 60
+    property int barLength : 120
     property int beatLength : barLength / unitCountInBeat
 
     function setCurrentPos(bar,beat,beatPos)
@@ -30,6 +30,8 @@ Rectangle {
             currentPos.height = height
             loopStartPos.height = height
             loopEndPos.height = height
+
+            trackViewRow.height = height
         }
 
         Row {
@@ -44,11 +46,23 @@ Rectangle {
 
             Column {
                 id: trackHeaderContainer
-                width: 200
-                anchors.top: parent.top
-                anchors.topMargin: 0
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 0
+                height:parent.height
+                width:200
+
+                onHeightChanged: {
+                    trackHeaderView.height = height
+                }
+
+                ListView {
+                    id: trackHeaderView
+                    height:parent.height
+                    model: trackModel
+                    delegate: Component {
+                        TrackHeader{
+                            trackName: name
+                        }
+                    }
+                }
             }
 
             Flickable {
@@ -59,6 +73,7 @@ Rectangle {
                 anchors.topMargin: 0
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: 0
+                clip: true
 
                 function setCurrentPos(bar,beat,beatPos)
                 {
@@ -96,19 +111,6 @@ Rectangle {
                     y: 0
                     width: 224
                     height: 358
-
-                    Rectangle
-                    {
-                        width:100
-                        height:100
-                        color:"#0F0"
-                    }
-                    Rectangle
-                    {
-                        width:100
-                        height:100
-                        color:"#F00"
-                    }
                 }
             }
         }

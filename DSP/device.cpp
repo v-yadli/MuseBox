@@ -71,12 +71,21 @@ void Device::WriteOutput(int channel, double value)
 
 void Device::AddInputChannel(int channelCount)
 {
+    InsertInputChannel(this->InputChannelCount,channelCount);
+}
+
+void Device::InsertInputChannel(int index, int channelCount)
+{
     Q_ASSERT(channelCount > 0);
     EndPoint** newICp = new EndPoint*[channelCount + InputChannelCount];
     Device** newDp = new Device*[channelCount + InputChannelCount];
 
-    memcpy(newICp, InputChannels, sizeof(EndPoint*) * InputChannelCount);
-    memcpy(newDp, InputChannelProviders, sizeof(Device**) * InputChannelCount);
+    memcpy(newICp, InputChannels, sizeof(EndPoint*) * index);
+    memset(newICp+index,0,sizeof(EndPoint*)*channelCount);
+    memcpy(newICp+index+channelCount, InputChannels+index, sizeof(EndPoint*) * (InputChannelCount-index));
+    memcpy(newDp, InputChannelProviders, sizeof(Device*) * index);
+    memset(newDp+index,0,sizeof(Device*)*channelCount);
+    memcpy(newDp+index+channelCount, InputChannels+index, sizeof(Device*) * (InputChannelCount - index));
 
     delete[] InputChannels;
     delete[] InputChannelProviders;
@@ -85,6 +94,7 @@ void Device::AddInputChannel(int channelCount)
     InputChannelProviders = newDp;
 
     InputChannelCount += channelCount;
+
 }
 
 void Device::RemoveInputChannel(int Index, int count)

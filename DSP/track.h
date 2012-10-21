@@ -12,12 +12,16 @@ public:
     ~Track();
     virtual void Update();
     virtual QString DeviceType(){return "Track";}
-private:
+
+    void setRecording(bool flag);
+
+    QString name;
+    bool readyToRecord;//when performing an update while playing, readyToRecord flag will trigger a new recording transaction
     bool Recording;
-    int* recordingChannels;
+    QVector<int> recordingChannels;
     QVector<Pattern*> pattern;
-    QMap<int, PatternNote*> patternArrangement;
-    QMap<Pattern*, QVector<Pattern*>*> patternGroup;
+    QVector<PatternNote*> arrangement;
+    //QMap<Pattern*, QVector<Pattern*>*> patternGroup;//TODO create a pattern model, include it in a pattern.
 
 };
 

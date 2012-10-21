@@ -181,7 +181,6 @@ QVector<RtAudio::DeviceInfo> Hardware::GetDevices()
 void Hardware::StartAudio()
 {
     StopAudio();
-    locker.lock();
     try{
     rtAudioInstance->openStream(&OutputDeviceParameters,
                                 &InputDeviceParameters,
@@ -207,17 +206,14 @@ void Hardware::StartAudio()
                                     );
     }
     rtAudioInstance->startStream();
-    locker.unlock();
 }
 
 void Hardware::StopAudio()
 {
-    locker.lock();
 //    if(rtAudioInstance->isStreamRunning())
 //        rtAudioInstance->abortStream();
     if(rtAudioInstance->isStreamOpen())
         rtAudioInstance->closeStream();
-    locker.unlock();
 }
 
 void Hardware::ResetAudio()
@@ -230,7 +226,6 @@ void Hardware::UpdateSettings(int deviceID, RtAudio::DeviceInfo devInfo, unsigne
 {
     StopAudio();
 
-    locker.lock();
     OutputDeviceParameters.deviceId = InputDeviceParameters.deviceId = deviceID;
     OutputDeviceParameters.firstChannel = InputDeviceParameters.firstChannel = 0;
     OutputDeviceParameters.nChannels = devInfo.outputChannels;
@@ -241,7 +236,6 @@ void Hardware::UpdateSettings(int deviceID, RtAudio::DeviceInfo devInfo, unsigne
 
     InputDeviceName = OutputDeviceName = QString(devInfo.name.c_str());
     TransposeMachine->SetBPM(TransposeMachine->BPM);
-    locker.unlock();
     //TODO what if channel count have changed?
     StartAudio();
 }
@@ -294,7 +288,6 @@ int Hardware::rtAudioCallback(void* outputBuffer, void* inputBuffer, uint nFrame
 //Note that if a device is not registered as a global device, the dependency won't be count in.
 bool Hardware::InstallDependency(Device* source, Device* target)
 {
-    locker.lock();
     if(!DeviceList.contains(source))
         return false;
     if(!DeviceList.contains(target))
@@ -302,12 +295,10 @@ bool Hardware::InstallDependency(Device* source, Device* target)
     DeviceTuple t(source, target);
     DependencyList.push_back(t);
     UpdateComputationSequence();
-    locker.unlock();
     return true;
 }
 bool Hardware::RemoveDependency(Device* source, Device* target)
 {
-    locker.lock();
     for(int i=0;i<DependencyList.count();++i)
         if(DependencyList[i].Source == source && DependencyList[i].Target == target)
         {
@@ -315,19 +306,15 @@ bool Hardware::RemoveDependency(Device* source, Device* target)
             break;
         }
     UpdateComputationSequence();
-    locker.unlock();
     return true;
 }
 bool Hardware::InstallDevice(Device* dsp)
 {
-    locker.lock();
     DeviceList.push_back(dsp);
-    locker.unlock();
     return true;
 }
 bool Hardware::RemoveDevice(Device* dsp)
 {
-    locker.lock();
     for(int i=0;i<DeviceList.count();++i)
         if(DeviceList[i] == dsp)
         {
@@ -349,7 +336,6 @@ bool Hardware::RemoveDevice(Device* dsp)
     }
     UpdateComputationSequence();
     delete dsp;
-    locker.unlock();
     return true;
 }
 
@@ -402,9 +388,11 @@ void Hardware::UpdateComputationSequence()
         delete[] graph[i];
     delete[] graph;
 }
+/////////Called by the RT-Thread, need to lock
 void Hardware::Update()
 {
-    locker.lock();
+    if(!locker.tryLock(100))
+        return;
     foreach (Device* dsp ,DeviceList)
         dsp->Update();
     ++TimeStamp;
