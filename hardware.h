@@ -42,6 +42,7 @@ public:
     static unsigned int BufferFrames;
 
     static double ReadAudioInput(int channel);
+    static double MasterDb(int channel);
 
     static void Lock(){locker.lock();}
     static void Unlock(){locker.unlock();}

@@ -58,6 +58,12 @@ double Device::ReadInput(int channel)
     else return 0;
 }
 
+void Device::WriteInput(int channel, double val)
+{
+    if (InputChannels[channel] != NULL)
+        InputChannels[channel]->Data = val;
+}
+
 void Device::WriteOutput(int channel, double value)
 {
     OutputChannels[channel]->Data = value;

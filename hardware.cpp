@@ -7,6 +7,7 @@
 #include <QDebug>
 #include "DSP/devicetuple.h"
 #include "DSP/audiointerface.h"
+#include <cmath>
 
 RtAudio* Hardware::rtAudioInstance;
 RtAudio::Api Hardware::currentApi;
@@ -26,6 +27,7 @@ QVector<RtAudio::DeviceInfo> Hardware::audioDeviceList;
 StereoMixer* Hardware::MainMixer;
 Transpose* Hardware::TransposeMachine;
 bool Hardware::Monitor = true;
+QVector<double> MasterLevel;
 
 
 unsigned int ProbeDeviceId(QString devName)
@@ -71,12 +73,19 @@ void Hardware::Init()
     Hardware::InstallDevice(TransposeMachine);
     AudioOutput->PlugInput(0,MainMixer,0);
     AudioOutput->PlugInput(0,MainMixer,1);
+    MasterLevel.push_back(0);
+    MasterLevel.push_back(0);//Assuming stereo configuration
 }
 
 //Should be called in Update() procedures
 double Hardware::ReadAudioInput(int channel)
 {
     return AudioInput->OutputChannels[channel]->Data;
+}
+
+double Hardware::MasterDb(int channel)
+{
+    return MasterLevel[channel];
 }
 
 void Hardware::DeInit()
@@ -233,7 +242,7 @@ void Hardware::UpdateSettings(int deviceID, RtAudio::DeviceInfo devInfo, unsigne
     InputDeviceName = OutputDeviceName = QString(devInfo.name.c_str());
     TransposeMachine->SetBPM(TransposeMachine->BPM);
     locker.unlock();
-
+    //TODO what if channel count have changed?
     StartAudio();
 }
 
@@ -258,6 +267,8 @@ int Hardware::rtAudioCallback(void* outputBuffer, void* inputBuffer, uint nFrame
     double* outputPtr = (double*)outputBuffer;
     double* inputPtr = (double*)inputBuffer;
 
+    QVector<double> _masterLevel;
+
     for (uint i = 0; i != nFrames; ++i)
     {
         for (unsigned int j = 0; j < InputDeviceParameters.nChannels; ++j)
@@ -269,8 +280,13 @@ int Hardware::rtAudioCallback(void* outputBuffer, void* inputBuffer, uint nFrame
             if(j < 2)
                 val += TransposeMachine->OutputChannels[j]->Data;
             *(outputPtr++) = val;
+            if(fabs(val) > MasterLevel[j])
+                MasterLevel[j] = fabs(val);
         }
     }
+
+    for(int i=0;i<OutputDeviceParameters.nChannels;++i)
+        MasterLevel[i] *= 0.1;
 
     return 0;
 }

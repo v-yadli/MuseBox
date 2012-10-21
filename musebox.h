@@ -87,6 +87,12 @@ public:
         HWLOCK;
         Hardware::TransposeMachine->Click = click;
     }
+    Q_INVOKABLE void setLoop(bool loop)
+    {
+        HWLOCK;
+        Hardware::TransposeMachine->Loop = loop;
+    }
+
 
     Q_INVOKABLE void beginUpdateGUI()
     {
@@ -120,6 +126,14 @@ public:
     Q_INVOKABLE int getMillisecond()
     {
         return Hardware::TransposeMachine->getMillisecond();
+    }
+    Q_INVOKABLE double masterL()
+    {
+        return Hardware::MasterDb(0);
+    }
+    Q_INVOKABLE double masterR()
+    {
+        return Hardware::MasterDb(1);
     }
 
 
