@@ -16,6 +16,19 @@ public:
     virtual void Update();
     void AddFX(Device*);
     void RemoveFX(int);
+
+    double dbL()
+    {
+        return _dbL;
+    }
+
+    double dbR()
+    {
+        return _dbR;
+    }
+
+    double _dbL,_dbR;
+
     QVector<Device*> InsertFX;
     StereoEP InputEP;
 };

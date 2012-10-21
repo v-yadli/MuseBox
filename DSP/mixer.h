@@ -6,20 +6,20 @@
 #include "const.h"
 #include <QVector>
 #include "stereoep.h"
+#include <QObject>
 //Stereo mixer.
 
 class StereoMixer : public Device
 {
 public:
-    StereoMixer();
-    virtual void OnInputDeviceRemoved(QVector<int>);
+    explicit StereoMixer();
+    void OnInputDeviceRemoved(QVector<int>);
     ~StereoMixer();
-    virtual QString DeviceType(){return "StereoMixer";}
-    virtual void Update();
+    QString DeviceType(){return "StereoMixer";}
+    void Update();
     MixerChannel* AddInputDevice(Device* dev);
     MixerChannel* InsertInputDevice(int index,Device* dev);
 
-private:
     MixerChannel* masterChannel;
 
     QVector<MixerChannel*> InputMixerChannels;

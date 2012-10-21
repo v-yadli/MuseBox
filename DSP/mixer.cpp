@@ -1,7 +1,6 @@
 #include "mixer.h"
 
-StereoMixer::StereoMixer():
-    Device(0,2)
+StereoMixer::StereoMixer(): Device(0,2)
 {
     for(int i=0;i<STEREO_MIXER_SEND_NUMBER;++i)
     {

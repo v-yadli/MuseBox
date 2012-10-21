@@ -4,13 +4,14 @@ import "TransposeComponents"
 
 Rectangle {
     id: base
-    width: 300
+    width: 200
     height: 80
 
-    property string trackName:""
-    onTrackNameChanged: {
-        console.log("reaching onTrackNameChanged");
-        trackNameTextEdit.text=trackName
+    property string trackName : ""
+    onTrackNameChanged:
+    {
+        trackNameText.text=trackName
+        console.log(trackName)
     }
 
     gradient: Gradient {
@@ -25,11 +26,16 @@ Rectangle {
         }
     }
 
-    TextEdit {
+    function updateDbMeter(l,r)
+    {
+        dbMeter.update(l,r)
+    }
+
+    Text {
         onTextChanged: {
-            trackName=text
+            console.log("Track name text changed to "+text);
         }
-        id: trackNameTextEdit
+        id: trackNameText
         height: 20
         color: "#db9c44"
         text: qsTr("Track Name")
@@ -58,8 +64,9 @@ Rectangle {
     }
 */
     HorizonDbMeter{
-        x: 75
-        y: 40
+        id:dbMeter
+        x: 13
+        y: 25
     }
 /*
     Image {

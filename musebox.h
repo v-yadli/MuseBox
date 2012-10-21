@@ -105,6 +105,15 @@ public:
         Hardware::Unlock();
     }
 
+    Q_INVOKABLE double query_dBL(int channel)
+    {
+        return Hardware::MainMixer->InputMixerChannels[channel]->dbL();
+    }
+    Q_INVOKABLE double query_dBR(int channel)
+    {
+        return Hardware::MainMixer->InputMixerChannels[channel]->dbR();
+    }
+
 
     //TODO expose TransposeMachine to QML to reduce call counts
     Q_INVOKABLE int getBar()

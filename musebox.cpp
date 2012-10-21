@@ -14,5 +14,6 @@ MuseBox::MuseBox(QWidget *parent) :
     view->setResizeMode(QDeclarativeView::SizeRootObjectToView);
     setCentralWidget(view);
     Hardware::Init();
+//    view->rootContext()->setContextProperty("transposeMachine",Hardware::TransposeMachine);
     Hardware::StartAudio();
 }

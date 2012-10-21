@@ -33,7 +33,7 @@ Rectangle {
         id: image1
         anchors.fill: parent
         fillMode: Image.Tile
-        source: "office.png"
+        source: "noisy_grid.png"
     }
 
     Timer{
@@ -53,6 +53,10 @@ Rectangle {
             trackView.setCurrentPos(bar,beat,beatPos)
 
             transpose.updateMasterDbMeter(musebox.masterL(), musebox.masterR())
+            for(var i=0;i<trackView.trackCount();++i)
+            {
+                trackView.updateDbMeter(i,musebox.query_dBL(i),musebox.query_dBR(i))
+            }
         }
     }
 

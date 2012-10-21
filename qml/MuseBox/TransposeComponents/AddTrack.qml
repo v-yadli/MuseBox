@@ -60,7 +60,7 @@ Rectangle {
         anchors.fill: parent
         onPressed: {
             parent.state= "Pushed"
-            trackModel.addTrack()
+            trackView.addTrack()
         }
         onReleased: {
             parent.state= "Released"

@@ -1,4 +1,5 @@
 #include "mixerchannel.h"
+#include <cmath>
 
 MixerChannel::MixerChannel():
     Device(2,2)
@@ -6,6 +7,7 @@ MixerChannel::MixerChannel():
     pre = false;
     fader = 1.0;
     panning = 0.0;
+    _dbL = _dbR = 0;
 }
 
 MixerChannel::~MixerChannel()
@@ -38,6 +40,16 @@ void MixerChannel::Update()
     r *= fader;
     l *= (1+panning);
     r *= (1-panning);
+
+    if(fabs(l) > _dbL)
+        _dbL = fabs(l);
+    else
+        _dbL *= 0.9;
+
+    if(fabs(r) > _dbR)
+        _dbR = fabs(r);
+    else
+        _dbR *= 0.9;
 
     WriteOutput(0,l);
     WriteOutput(1,r);
