@@ -10,24 +10,24 @@ public:
     MixerChannel();
     ~MixerChannel();
     bool pre;
-    double fader;
-    double panning;
-    double SendLevel[STEREO_MIXER_SEND_NUMBER];
+    float fader;
+    float panning;
+    float SendLevel[STEREO_MIXER_SEND_NUMBER];
     virtual void Update();
     void AddFX(Device*);
     void RemoveFX(int);
 
-    double dbL()
+    float dbL()
     {
         return _dbL;
     }
 
-    double dbR()
+    float dbR()
     {
         return _dbR;
     }
 
-    double _dbL,_dbR;
+    float _dbL,_dbR;
 
     QVector<Device*> InsertFX;
     StereoEP InputEP;

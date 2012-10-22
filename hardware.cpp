@@ -27,7 +27,7 @@ QVector<RtAudio::DeviceInfo> Hardware::audioDeviceList;
 StereoMixer* Hardware::MainMixer;
 Transpose* Hardware::TransposeMachine;
 bool Hardware::Monitor = true;
-QVector<double> MasterLevel;
+QVector<float> MasterLevel;
 
 
 unsigned int ProbeDeviceId(QString devName)
@@ -78,12 +78,12 @@ void Hardware::Init()
 }
 
 //Should be called in Update() procedures
-double Hardware::ReadAudioInput(int channel)
+float Hardware::ReadAudioInput(int channel)
 {
     return AudioInput->OutputChannels[channel]->Data;
 }
 
-double Hardware::MasterDb(int channel)
+float Hardware::MasterDb(int channel)
 {
     return MasterLevel[channel];
 }
@@ -184,7 +184,7 @@ void Hardware::StartAudio()
     try{
     rtAudioInstance->openStream(&OutputDeviceParameters,
                                 &InputDeviceParameters,
-                                RTAUDIO_FLOAT64,
+                                RTAUDIO_FLOAT32,
                                 SampleRate,
                                 &BufferFrames,
                                 rtAudioCallback,
@@ -197,7 +197,7 @@ void Hardware::StartAudio()
         BufferFrames = rtAudioInstance->getPreferredBufferSize();
         rtAudioInstance->openStream(&OutputDeviceParameters,
                                     &InputDeviceParameters,
-                                    RTAUDIO_FLOAT64,
+                                    RTAUDIO_FLOAT32,
                                     SampleRate,
                                     &BufferFrames,
                                     rtAudioCallback,
@@ -258,10 +258,10 @@ To continue normal stream operation, the RtAudioCallback function should return 
 */
 int Hardware::rtAudioCallback(void* outputBuffer, void* inputBuffer, uint nFrames, double streamTime, RtAudioStreamStatus status, void* value)
 {
-    double* outputPtr = (double*)outputBuffer;
-    double* inputPtr = (double*)inputBuffer;
+    float* outputPtr = (float*)outputBuffer;
+    float* inputPtr = (float*)inputBuffer;
 
-    int maxMutexWaitTime = (nFrames / (double)SampleRate) *1000.0;
+    int maxMutexWaitTime = (nFrames / (float)SampleRate) *1000.0;
 
     if(!locker.tryLock(maxMutexWaitTime))//TODO emit CPU overload signal
         return 0;
@@ -273,7 +273,7 @@ int Hardware::rtAudioCallback(void* outputBuffer, void* inputBuffer, uint nFrame
         Update();
         for (unsigned int j = 0; j < OutputDeviceParameters.nChannels; ++j)
         {
-            double val = AudioOutput->ReadInput(j);
+            float val = AudioOutput->ReadInput(j);
             if(j < 2)
                 val += TransposeMachine->OutputChannels[j]->Data;
             *(outputPtr++) = val;

@@ -18,7 +18,7 @@ MixerChannel::~MixerChannel()
 
 void MixerChannel::Update()
 {
-    double l,r;
+    float l,r;
     if(InsertFX.count() > 0)
     {
         InputEP.l.Data = ReadInput(0);

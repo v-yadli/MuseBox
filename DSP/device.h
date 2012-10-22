@@ -24,9 +24,9 @@ public:
     }
     void PlugInput(int channel, Device* sourceDSP, int sourceChannel);
     void UnplugInput(int channel);
-    double ReadInput(int);
-    void WriteInput(int channel,double val);
-    void WriteOutput(int,double);
+    float ReadInput(int);
+    void WriteInput(int channel,float val);
+    void WriteOutput(int,float);
     void AddInputChannel(int channelCount);
     void InsertInputChannel(int index,int channelCount);
     void RemoveInputChannel(int Index, int count);

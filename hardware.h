@@ -41,18 +41,18 @@ public:
     static unsigned int SampleRate;
     static unsigned int BufferFrames;
 
-    static double ReadAudioInput(int channel);
-    static double MasterDb(int channel);
+    static float ReadAudioInput(int channel);
+    static float MasterDb(int channel);
 
     static void Lock(){locker.lock();}
     static void Unlock(){locker.unlock();}
 
 
-    static double Jiffy()
+    static float Jiffy()
     {
         return 1000.0 / SampleRate;
     }
-    static double CurrentTime()
+    static float CurrentTime()
     {
         return Jiffy() * TimeStamp;
     }

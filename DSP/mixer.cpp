@@ -126,7 +126,7 @@ void StereoMixer::Update()
         SendEPs[i]->l.Data = 0.0;
         SendEPs[i]->r.Data = 0.0;
     }
-    double l = 0.0, r = 0.0;
+    float l = 0.0, r = 0.0;
     for(int i=0;i<InputMixerChannels.count();++i)
     {
         InputEPs[i]->l.Data = ReadInput(i*2);

@@ -28,8 +28,8 @@ Transpose::Transpose(int BPM)://A transpose is just a transpose. It has no input
 
     for(int i=0;i<2000;++i)
     {
-        BarSound->Put(0,sin((double)(i/8)));
-        BeatSound->Put(0,sin((double)(i/16)));
+        BarSound->Put(0,sin((float)(i/8)));
+        BeatSound->Put(0,sin((float)(i/16)));
     }
 }
 
@@ -38,7 +38,7 @@ void Transpose::Play()
     Playing = true;
 }
 
-double Transpose::getTime()
+float Transpose::getTime()
 {
     return Time / Hardware::SampleRate;
 }
@@ -75,7 +75,7 @@ void Transpose::Update()
         beatStartTime = Time;
     }
 
-    double l=0;
+    float l=0;
     l += BarSound->Get(0,Time - barStartTime);
     l += BeatSound->Get(0,Time - beatStartTime);
 
@@ -106,12 +106,12 @@ void Transpose::Update()
     }
 }
 
-double Transpose::SampleToBeats(double sampleCount)
+float Transpose::SampleToBeats(float sampleCount)
 {
     return BPM * (sampleCount / Hardware::SampleRate) / 60.0;
 }
 
-double Transpose::BeatsToSample(double beatCount)
+float Transpose::BeatsToSample(float beatCount)
 {
     return (beatCount / (BPM / 60.0)) * Hardware::SampleRate;
 }

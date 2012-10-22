@@ -7,14 +7,14 @@ public:
     Pattern(int ChannelCount = 2);
     ~Pattern();
     virtual QString DeviceType(){return "Pattern";}
-    double Get(int channel, int pos);
-    void Put(int channel, double val);
+    float Get(int channel, int pos);
+    void Put(int channel, float val);
     QString title;
 
 private:
     int ChannelCount;
     unsigned int pos;
-    QVector<double>** data;
+    QVector<float>** data;
 };
 
 #endif // PATTERN_H

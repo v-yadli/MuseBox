@@ -16,18 +16,18 @@ class Transpose : public Device
 {
 public:
     Transpose(int BPM);
-    double SampleToBeats(double sampleCount);
-    double BeatsToSample(double beatCount);
+    float SampleToBeats(float sampleCount);
+    float BeatsToSample(float beatCount);
     virtual void Update();
     virtual QString DeviceType(){return "Transpose";}
     void SetBPM(int BPM);
-    bool Crossing(double time, double delta, double unit){return ((int)((time-delta)/unit)!=(int)((time)/unit));}
+    bool Crossing(float time, float delta, float unit){return ((int)((time-delta)/unit)!=(int)((time)/unit));}
 
     int BPM;
     bool Playing;
     bool Recording;
     bool Click;
-    double ClickLevel;
+    float ClickLevel;
 
     int BarCount; //How many beats in a bar
     int BeatCount; //How many units in a beat
@@ -35,22 +35,22 @@ public:
     int LoopStart;
     int LoopEnd;
     bool Loop;
-    double Speed;
+    float Speed;
 
     ////////////////////////////////////
-    double Time;//Measured in samples
+    float Time;//Measured in samples
     ////////////////////////////////////
 
     Pattern* BarSound;
     Pattern* BeatSound;
 
-    double barStartTime;
-    double beatStartTime;
+    float barStartTime;
+    float beatStartTime;
 
-    double barTime;
-    double beatTime;
+    float barTime;
+    float beatTime;
 
-    double getTime();//Measured in seconds
+    float getTime();//Measured in seconds
 
     int getBar()
     {
@@ -72,9 +72,9 @@ public:
     {
         return (getTime() - getMinute()*60 - getSecond()) * 1000;
     }
-    double getPositionInBeat()
+    float getPositionInBeat()
     {
-        double bt = (Time - getBar()*barTime);
+        float bt = (Time - getBar()*barTime);
         return (bt - ((int)(bt / beatTime))*beatTime) / beatTime;
     }
 

@@ -5,7 +5,7 @@ class EndPoint
 {
 public:
     EndPoint();
-    double Data;
+    float Data;
 };
 
 #endif // ENDPOINT_H

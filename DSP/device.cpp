@@ -51,20 +51,20 @@ void Device::__RemoveInputDevice__(Device* dsp)
     }
 }
 
-double Device::ReadInput(int channel)
+float Device::ReadInput(int channel)
 {
     if (InputChannels[channel] != NULL)
         return InputChannels[channel]->Data;
     else return 0;
 }
 
-void Device::WriteInput(int channel, double val)
+void Device::WriteInput(int channel, float val)
 {
     if (InputChannels[channel] != NULL)
         InputChannels[channel]->Data = val;
 }
 
-void Device::WriteOutput(int channel, double value)
+void Device::WriteOutput(int channel, float value)
 {
     OutputChannels[channel]->Data = value;
 }

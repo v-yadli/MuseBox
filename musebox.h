@@ -80,7 +80,7 @@ public:
             Hardware::TransposeMachine->Stop();
     }
 
-    Q_INVOKABLE void setSpeed(double speed)
+    Q_INVOKABLE void setSpeed(float speed)
     {
         HWLOCK;
         Hardware::TransposeMachine->Speed = speed;
@@ -105,11 +105,11 @@ public:
         Hardware::Unlock();
     }
 
-    Q_INVOKABLE double query_dBL(int channel)
+    Q_INVOKABLE float query_dBL(int channel)
     {
         return Hardware::MainMixer->InputMixerChannels[channel]->dbL();
     }
-    Q_INVOKABLE double query_dBR(int channel)
+    Q_INVOKABLE float query_dBR(int channel)
     {
         return Hardware::MainMixer->InputMixerChannels[channel]->dbR();
     }
@@ -124,7 +124,7 @@ public:
     {
         return Hardware::TransposeMachine->getBeat();
     }
-    Q_INVOKABLE double getPositionInBeat()//Measured in percentage, from 0 to 1
+    Q_INVOKABLE float getPositionInBeat()//Measured in percentage, from 0 to 1
     {
         return Hardware::TransposeMachine->getPositionInBeat();
     }
@@ -140,11 +140,11 @@ public:
     {
         return Hardware::TransposeMachine->getMillisecond();
     }
-    Q_INVOKABLE double masterL()
+    Q_INVOKABLE float masterL()
     {
         return Hardware::MasterDb(0);
     }
-    Q_INVOKABLE double masterR()
+    Q_INVOKABLE float masterR()
     {
         return Hardware::MasterDb(1);
     }
