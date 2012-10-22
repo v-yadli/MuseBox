@@ -7,11 +7,26 @@ Rectangle {
     width: 200
     height: 80
 
+    signal selected()
+    signal setTrackName(string newText)
+
+    MouseArea{
+        anchors.fill : parent
+        onClicked:{
+            if(tNameEdit.visible)
+            {
+                tNameEdit.visible = false
+                tName.visible = true
+                setTrackName(tNameEdit.text)
+            }
+            selected()
+        }
+    }
+
     property string trackName : ""
     onTrackNameChanged:
     {
-        trackNameText.text=trackName
-        console.log(trackName)
+        tName.text=trackName
     }
 
     gradient: Gradient {
@@ -31,15 +46,39 @@ Rectangle {
         dbMeter.update(l,r)
     }
 
+    TextEdit{
+        id: tNameEdit
+        height: 20
+        anchors.top: parent.top
+        anchors.topMargin: 0
+        anchors.right: parent.right
+        anchors.rightMargin: 0
+        anchors.left: parent.left
+        anchors.leftMargin: 0
+        visible: false
+        anchors.fill: parent
+        color: "#e2cbad"
+        wrapMode: TextEdit.WordWrap
+        font.bold: true
+        font.pixelSize: 14
+    }
+
     Text {
-        onTextChanged: {
-            console.log("Track name text changed to "+text);
+        MouseArea{
+            anchors.fill: parent
+            onClicked: {
+                tNameEdit.text = parent.text
+                tNameEdit.focus = true
+                tNameEdit.visible = true
+                tNameEdit.enabled = true
+                parent.visible = false
+            }
         }
-        id: trackNameText
+        id: tName
         height: 20
         color: "#db9c44"
-        text: qsTr("Track Name")
-        wrapMode: TextEdit.WordWrap
+        text: qsTr("")
+        wrapMode: TextEdit.NoWrap
         font.bold: true
         anchors.top: parent.top
         anchors.topMargin: 0

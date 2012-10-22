@@ -44,6 +44,12 @@ public:
     {
         insertRows(trackList.count(),1);
     }
+    Q_INVOKABLE void setData(int row, const QString& role, QVariant data)
+    {
+        int roleID=roleNames().key(role.toLocal8Bit());
+        setData(index(row),data,roleID);
+    }
+
     //Storage structures
     QList<Track*> trackList;
     QList<MixerChannel*> mixerChannelList;

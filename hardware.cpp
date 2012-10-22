@@ -261,7 +261,10 @@ int Hardware::rtAudioCallback(void* outputBuffer, void* inputBuffer, uint nFrame
     double* outputPtr = (double*)outputBuffer;
     double* inputPtr = (double*)inputBuffer;
 
-    QVector<double> _masterLevel;
+    int maxMutexWaitTime = (nFrames / (double)SampleRate) *1000.0;
+
+    if(!locker.tryLock(maxMutexWaitTime))//TODO emit CPU overload signal
+        return 0;
 
     for (uint i = 0; i != nFrames; ++i)
     {
@@ -281,6 +284,8 @@ int Hardware::rtAudioCallback(void* outputBuffer, void* inputBuffer, uint nFrame
 
     for(int i=0;i<OutputDeviceParameters.nChannels;++i)
         MasterLevel[i] *= 0.1;
+
+    locker.unlock();
 
     return 0;
 }
@@ -391,10 +396,7 @@ void Hardware::UpdateComputationSequence()
 /////////Called by the RT-Thread, need to lock
 void Hardware::Update()
 {
-    if(!locker.tryLock(100))
-        return;
     foreach (Device* dsp ,DeviceList)
         dsp->Update();
     ++TimeStamp;
-    locker.unlock();
 }

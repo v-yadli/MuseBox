@@ -134,19 +134,21 @@ void StereoMixer::Update()
         if(InputMixerChannels[i]->pre)
         {
             for(int j=0;j<STEREO_MIXER_SEND_NUMBER;++j)
-            {
-                SendEPs[j]->l.Data += InputMixerChannels[i]->ReadInput(0) * InputMixerChannels[i]->SendLevel[j];
-                SendEPs[j]->r.Data += InputMixerChannels[i]->ReadInput(1) * InputMixerChannels[i]->SendLevel[j];
-            }
-        }
-        InputMixerChannels[i]->Update();
-        if(!InputMixerChannels[i]->pre)
+                if(InputMixerChannels[i]->SendLevel[j] > eps)
+                {
+                    SendEPs[j]->l.Data += InputMixerChannels[i]->ReadInput(0) * InputMixerChannels[i]->SendLevel[j];
+                    SendEPs[j]->r.Data += InputMixerChannels[i]->ReadInput(1) * InputMixerChannels[i]->SendLevel[j];
+                }
+            InputMixerChannels[i]->Update();
+        }else
         {
+            InputMixerChannels[i]->Update();
             for(int j=0;j<STEREO_MIXER_SEND_NUMBER;++j)
-            {
-                SendEPs[j]->l.Data += InputMixerChannels[i]->ReadInput(0) * InputMixerChannels[i]->SendLevel[j];
-                SendEPs[j]->r.Data += InputMixerChannels[i]->ReadInput(1) * InputMixerChannels[i]->SendLevel[j];
-            }
+                if(InputMixerChannels[i]->SendLevel[j] > eps)
+                {
+                    SendEPs[j]->l.Data += InputMixerChannels[i]->ReadInput(0) * InputMixerChannels[i]->SendLevel[j];
+                    SendEPs[j]->r.Data += InputMixerChannels[i]->ReadInput(1) * InputMixerChannels[i]->SendLevel[j];
+                }
         }
 
         l += InputMixerChannels[i]->OutputChannels[0]->Data;

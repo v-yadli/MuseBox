@@ -5,6 +5,8 @@
 #include <QVector>
 #include <QString>
 
+#define eps 0.00000000001
+
 class Device
 {
 public:

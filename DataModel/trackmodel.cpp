@@ -1,6 +1,7 @@
 #include "trackmodel.h"
 #include "../hardware.h"
 #include <QHash>
+#include <QDebug>
 #include <QByteArray>
 
 TrackModel::TrackModel(QObject *parent) :
@@ -51,6 +52,7 @@ bool TrackModel::setData(const QModelIndex &index, const QVariant &value, int ro
     {
     case NameRole:
         track->name = value.toString();
+        qDebug()<<QString("Changing the name of track #%1 to %2").arg(index.row()).arg(track->name);
         emit dataChanged(index,index);
         return true;
     case RecordingRole:

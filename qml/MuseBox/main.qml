@@ -17,28 +17,10 @@ Rectangle {
         anchors.leftMargin: 0
         z: 1
     }
-//    MouseArea {
-//        anchors.fill: parent
-//        onClicked: {
-//            bridge.OpenConfigurationDialog()
-//        }
-//    }
-    Item{
-        Keys.onSpacePressed: {
-                museBox.togglePlayStop();
-            }
-    }
-
-    Image {
-        id: image1
-        anchors.fill: parent
-        fillMode: Image.Tile
-        source: "noisy_grid.png"
-    }
 
     Timer{
         id:guiTimer
-        interval: 30
+        interval: 200
         running:true
         repeat: true
         onTriggered: {
@@ -69,7 +51,6 @@ Rectangle {
 
         id: trackFlip//Track flip contains track view and mixer
         y: 0
-        height: 658
         anchors.right: patternFlip.left
         anchors.rightMargin: 0
         anchors.bottom: transpose.top
@@ -86,10 +67,7 @@ Rectangle {
 
     Flipable {
         id: patternFlip
-        x: 744
-        y: 0
-        width: 280
-        height: 658
+        width:100
         anchors.bottom: transpose.top
         anchors.bottomMargin: 0
         anchors.right: parent.right
@@ -98,15 +76,6 @@ Rectangle {
         anchors.topMargin: 0
         front: Rectangle{
             anchors.fill: parent
-        }
-    }
-
-    //v--------doesn't work!
-    Keys.onPressed: {
-        if(event.key === Qt.Key_Space)
-        {
-            transpose.togglePlay()
-            event.accepted = true
         }
     }
 }
