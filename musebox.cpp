@@ -1,12 +1,18 @@
 #include "musebox.h"
 #include <QDeclarativeContext>
+#include <QtDeclarative>
 #include "qmlapplicationviewer.h"
 #include "hardware.h"
+#include "trackarrangementbackground.h"
+#include "cursorruler.h"
+
 
 MuseBox::MuseBox(QWidget *parent) :
     QMainWindow(parent)
 {
     //TODO add a splash screen here? would be totally fun!
+    qmlRegisterType<TrackArrangementBackground>("TrackArrangement",1,0,"TrackArrangementBackground");
+    qmlRegisterType<CursorRuler>("TrackArrangement",1,0,"CursorRuler");
     QmlApplicationViewer *view = new QmlApplicationViewer();
     view->rootContext()->setContextProperty("musebox", this);
     view->rootContext()->setContextProperty("trackModel", &this->trackModel);

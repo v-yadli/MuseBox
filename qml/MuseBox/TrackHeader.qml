@@ -11,7 +11,12 @@ Rectangle {
     signal setTrackName(string newText)
 
     MouseArea{
-        anchors.fill : parent
+        anchors{
+            top:tName.bottom
+            bottom:parent.bottom
+            left:parent.left
+            right:parent.right
+        }
         onClicked:{
             if(tNameEdit.visible)
             {

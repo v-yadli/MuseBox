@@ -1,21 +1,18 @@
 // import QtQuick 1.0 // to target S60 5th Edition or Maemo 5
 import QtQuick 1.1
+import TrackArrangement 1.0
 
-Rectangle {
-    width: 500
-    height: 500
-    color: "#FF000000"
-    opacity: 1
+Image {
+
+    source:"navy_blue.png"
+    fillMode: Image.Tile
+
     clip: false
 
     property int unitCountInBeat : 3
     property int beatCountInBar : 3
     property int barLength : 120
     property int beatLength : barLength / unitCountInBeat
-    function setCurrentPos(bar,beat,beatPos)
-    {
-        hFlick.setCurrentPos(bar,beat,beatPos)
-    }
 
     function addTrack()
     {
@@ -35,6 +32,14 @@ Rectangle {
     {
         headerView.currentIndex=track
         headerView.currentItem.updateDbMeter(l,r)
+    }
+    function setCurrentPos(bar,beat,beatPos)
+    {
+        currentPos.x = bar*barLength + (beat+beatPos)*beatLength
+    }
+
+    onHeightChanged:{
+        cursors.height = height
     }
 
 /*****
@@ -58,9 +63,16 @@ Rectangle {
     Flickable {//The outside vertical flickable has a same size of the viewport
         boundsBehavior: Flickable.StopAtBounds
         id: vFlick
-        anchors.fill: parent
+        anchors{
+            top:parent.top
+            topMargin: 10
+            bottom:parent.bottom
+            left:parent.left
+            right:parent.right
+        }
         flickableDirection: Flickable.VerticalFlick
         clip: true
+        contentHeight:row.height
 
         onWidthChanged:{
             row.width=width
@@ -81,22 +93,17 @@ Rectangle {
                 hFlick.width = width - headerView.width
             }
             onHeightChanged: {
-//                headerColumn.height = height
-                headerView.height=height
-                hFlick.height = height
-                vFlick.contentHeight = height
+                //headerView.height=height
+                //hFlick.height = height
+                //vFlick.contentHeight = height
             }
             ListView {
                 id: headerView
                 interactive:false
                 x:0
                 width:200
-                height:0
+                height:parent.height
                 onHeightChanged: {
-                    currentPos.height = height
-                    loopStartPos.height = height
-                    loopEndPos.height = height
-                    headerView.height = height
                 }
 
                 model: trackModel
@@ -119,49 +126,15 @@ Rectangle {
                 boundsBehavior: Flickable.StopAtBounds
                 flickableDirection: Flickable.HorizontalFlick
                 width:row.width-headerView.width
-
+                height:row.height
+                contentWidth: width + 120*3
                 y:0
-                height:parent.height
 
-                onFlickEnded: {
-                    console.log("horizon flick end")
-                }
-
-                onHeightChanged: {
-                    arrangementView.height = height
-                }
+               onHeightChanged: {
+                   arrangementView.height = height
+               }
 
                 clip: true
-                function setCurrentPos(bar,beat,beatPos)
-                {
-                    currentPos.x = bar*barLength + (beat+beatPos)*beatLength
-                }
-                Rectangle{
-                    x:0
-                    id: currentPos
-                    width:1
-                    //anchors.top: parent <- doesn't work !!!
-                    //anchors.bottom: parent
-                    color: "#0F0"
-                    z:10000
-                    height:parent.height
-                }
-                Rectangle{
-                    x:0
-                    id: loopStartPos
-                    width:1
-                    height:parent.height
-                    color: "#F00"
-                    z:10001
-                }
-                Rectangle{
-                    x: barLength
-                    id: loopEndPos
-                    width:1
-                    height:parent.height
-                    color: "#00F"
-                    z:10002
-                }
                 ListView{
                     y: 0
                     property int rightMost: 1000
@@ -171,12 +144,80 @@ Rectangle {
                     width: rightMost//TODO : expand flick area when cannot hold new elements
                     model: trackModel
                     delegate : Component {
-                        TrackArrangement{
+                        TrackArrangementRow{
                             width: parent.width
+                            height: 80
                         }
                     }
+                }
+                TrackArrangementBackground{
+                    id:arrangementBackground
+                    height:parent.height
+                    width:parent.width + 120*3
                 }
             }
         }
     }
+
+    Item{//Layer II -- cursors
+        x:200
+        anchors.top:parent.top
+        anchors.bottom:parent.bottom
+        anchors.left:parent.left
+        anchors.leftMargin: headerView.width
+        anchors.right:parent.right
+        clip: true
+
+        Item{
+            id: cursors
+            x:-hFlick.contentX
+            anchors.top:parent.top
+            anchors.bottom:parent.bottom
+            width: parent.width + 120*3
+
+            CursorRuler{
+                anchors.top:parent.top
+                height:10
+                unitCount: 3
+                beatCount: 3
+                anchors.left:parent.left
+                anchors.right:parent.right
+            }
+
+            Rectangle{
+                x:0
+                id: currentPos
+                width:1
+                anchors{
+                    top:parent.top
+                    bottom:parent.bottom
+                }
+                color: "#0F0"
+                height:parent.height
+            }
+            Rectangle{
+                x:0
+                id: loopStartPos
+                width:1
+                anchors{
+                    top:parent.top
+                    bottom:parent.bottom
+                }
+                height:parent.height
+                color: "#F00"
+            }
+            Rectangle{
+                x: barLength
+                id: loopEndPos
+                width:1
+                anchors{
+                    top:parent.top
+                    bottom:parent.bottom
+                }
+                height:parent.height
+                color: "#00F"
+            }
+        }
+    }
+
 }
