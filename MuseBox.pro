@@ -51,7 +51,9 @@ SOURCES += main.cpp \
     cursorruler.cpp \
     DataModel/patternmodel.cpp \
     DataModel/messagebus.cpp \
-    patterndisplay.cpp
+    patterndisplay.cpp \
+    DataModel/notemodel.cpp \
+    patternnotedisplay.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -99,7 +101,9 @@ HEADERS += \
     DataModel/patternmodel.h \
     DataModel/pointerconverter.h \
     DataModel/messagebus.h \
-    patterndisplay.h
+    patterndisplay.h \
+    DataModel/notemodel.h \
+    patternnotedisplay.h
 
 FORMS += \
     audioconfigurationdialog.ui

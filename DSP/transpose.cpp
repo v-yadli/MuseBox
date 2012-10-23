@@ -121,3 +121,8 @@ float Transpose::BeatsToSample(float beatCount)
 {
     return (beatCount / (BPM / 60.0)) * Hardware::SampleRate;
 }
+
+float Transpose::SampleToBars(float sampleCount)
+{
+    return BPM * (sampleCount / Hardware::SampleRate) / 60.0 / BarCount;
+}

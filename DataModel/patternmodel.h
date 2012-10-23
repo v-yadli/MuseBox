@@ -35,6 +35,9 @@ public:
         int roleID=roleNames().key(role.toLocal8Bit());
         setData(index(row),data,roleID);
     }
+    Pattern* Get(int index){
+        return patternList[index];
+    }
 
     Pattern* recordNewPattern();
     //Storage structures

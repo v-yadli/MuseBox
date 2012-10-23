@@ -6,6 +6,7 @@
 #include <QString>
 #include <QMap>
 #include "../DataModel/patternmodel.h"
+#include "../DataModel/notemodel.h"
 class TrackModel;
 class Track : public Device
 {
@@ -24,9 +25,8 @@ public:
     PatternModel patternPool;
     Pattern* currentRecordingPattern;
     PatternModel* currentRecordingSession ;
-    QVector<PatternNote*> arrangement;//TODO
+    NoteModel arrangement;
     TrackModel* model;
-    //QMap<Pattern*, QVector<Pattern*>*> patternGroup;//TODO create a pattern model, include it in a pattern.
 
 };
 

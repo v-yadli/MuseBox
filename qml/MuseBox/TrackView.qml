@@ -132,14 +132,20 @@ Image {
                 flickableDirection: Flickable.HorizontalFlick
                 width:row.width-headerView.width
                 height:row.height
-                contentWidth: width + 120*3
+                contentWidth: Math.max(width + 120*3,arrangementView.rightMost)
                 y:0
 
-               onHeightChanged: {
-                   arrangementView.height = height
-               }
+                onHeightChanged: {
+                    arrangementView.height = height
+                }
 
                 clip: true
+                TrackArrangementBackground{
+                    id:arrangementBackground
+                    height:parent.height
+                    width:parent.width + 120*3
+                    z:0
+                }
                 ListView{
                     y: 0
                     property int rightMost: 1000
@@ -147,19 +153,21 @@ Image {
                     id: arrangementView
                     height:parent.height
                     width: rightMost//TODO : expand flick area when cannot hold new elements
-                    model: trackModel
+                    model: null
                     delegate : Component {
                         TrackArrangementRow{
+                            ListView.onAdd: {
+                                console.log("Adding new TrackArrangementRow");
+                            }
+                            id: arrangementRow
+                            rowModel : arrangement
                             width: parent.width
                             height: 80
                         }
                     }
+                    z:1
                 }
-                TrackArrangementBackground{
-                    id:arrangementBackground
-                    height:parent.height
-                    width:parent.width + 120*3
-                }
+
             }
         }
     }

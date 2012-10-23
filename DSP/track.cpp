@@ -27,9 +27,9 @@ void Track::Update()
             //Recording...
             if(currentRecordingPattern == NULL || Hardware::TransposeMachine->PositionJumped)
             {
-                qDebug()<<"recording a new pattern! :-D";
-                if(currentRecordingPattern != NULL)
-                    qDebug()<<QString("%1 samples collected!").arg(currentRecordingPattern->length());
+                //qDebug()<<"recording a new pattern! :-D";
+                //if(currentRecordingPattern != NULL)
+                //    qDebug()<<QString("%1 samples collected!").arg(currentRecordingPattern->length());
                 this->currentRecordingPattern = this->currentRecordingSession->recordNewPattern();
             }
             //TODO monitor flag
@@ -56,6 +56,9 @@ void Track::Update()
     }
 }
 
+int offset = 0;
+int idx = 0;
+
 void Track::setRecording(bool flag)
 {
     if(flag)
@@ -77,6 +80,13 @@ void Track::setRecording(bool flag)
             //dump data into pool
             qDebug()<<QString("recorded %1 patterns!").arg(currentRecordingSession->rowCount());
             patternPool.import(currentRecordingSession);
+            Pattern* p = currentRecordingSession->Get(0);
+            PatternNote note;
+            note.pattern = p;
+            note.position = offset;
+            note.length = p->length();
+            offset += p->length();
+            arrangement.insertNote(note,note.position);
             currentRecordingSession = NULL;
             currentRecordingPattern = NULL;
         }

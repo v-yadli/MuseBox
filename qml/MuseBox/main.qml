@@ -22,7 +22,7 @@ Rectangle {
 
     Timer{
         id:guiTimer
-        interval: 30
+        interval: 50
         running:true
         repeat: true
         onTriggered: {

@@ -35,11 +35,11 @@ QVariant TrackModel::data(const QModelIndex &index, int role) const
     {
     case NameRole:return track->name;
     case RecordingRole:return (track->recording || track->readyToRecord);
-    case RecordingChannelsRole:return QVariant();//NOT SUPPPORTED NOW
-    //case PatternsRole:return PointerConverter::toString(&track->pattern);
+    case RecordingChannelsRole:return QVariant();//TODO set recording channels
     case PatternsRole:return QVariant::fromValue((PatternModel*)(&(track->patternPool)));
     case RecordingSessionRole:return QVariant::fromValue( track->currentRecordingSession );
-    case PatternArrangementRole:return (unsigned long long)&track->arrangement;
+    case PatternArrangementRole:return QVariant::fromValue((NoteModel*)(&track->arrangement));
+    //case PatternArrangementRole:return 0;
     default:return QVariant();
     }
 }
