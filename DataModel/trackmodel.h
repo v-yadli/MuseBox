@@ -21,6 +21,7 @@ public:
         RecordingRole,
         RecordingChannelsRole,
         PatternsRole,//a pattern list model
+        RecordingSessionRole,//a pattern list model for current recording session
         PatternArrangementRole//a pattern arrangement list model
         /*
         Volume, These are mixer settings.
@@ -40,9 +41,12 @@ public:
     bool insertRows ( int row, int count, const QModelIndex & parent = QModelIndex() );
     bool removeRows ( int row, int count, const QModelIndex & parent = QModelIndex() );
 
+    void pulse(Track*);
+
     Q_INVOKABLE void addTrack()
     {
-        insertRows(trackList.count(),1);
+        int cnt = trackList.count();
+        insertRows(cnt,1);
     }
     Q_INVOKABLE void setData(int row, const QString& role, QVariant data)
     {
@@ -53,9 +57,6 @@ public:
     //Storage structures
     QList<Track*> trackList;
     QList<MixerChannel*> mixerChannelList;
-signals:
-    
-public slots:
 
 private:
     int nextTrackID;

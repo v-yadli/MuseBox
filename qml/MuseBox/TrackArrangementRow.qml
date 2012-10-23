@@ -2,5 +2,7 @@
 import QtQuick 1.1
 
 Item {
-
+    ListView{
+        orientation: ListView.Horizontal
+    }
 }

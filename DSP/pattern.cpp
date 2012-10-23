@@ -1,4 +1,5 @@
 #include "pattern.h"
+#include "../DataModel/patternmodel.h"
 
 Pattern::Pattern(int ChannelCount)
 {
@@ -15,6 +16,11 @@ Pattern::~Pattern()
         delete data[i];
     }
     delete[] data;
+}
+
+int Pattern::length()
+{
+    return data[0]->count();
 }
 
 void Pattern::Put(int channel, float val)

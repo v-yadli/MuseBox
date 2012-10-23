@@ -3,6 +3,7 @@
 #include <QHash>
 #include <QDebug>
 #include <QByteArray>
+#include "pointerconverter.h"
 
 TrackModel::TrackModel(QObject *parent) :
     QAbstractListModel(parent)
@@ -12,6 +13,7 @@ TrackModel::TrackModel(QObject *parent) :
     roles[RecordingRole] = "recording";
     roles[RecordingChannelsRole] = "channel";
     roles[PatternsRole] = "patterns";
+    roles[RecordingSessionRole] = "session";
     roles[PatternArrangementRole] = "arrangement";
     setRoleNames(roles);
 
@@ -32,9 +34,11 @@ QVariant TrackModel::data(const QModelIndex &index, int role) const
     switch(role)
     {
     case NameRole:return track->name;
-    case RecordingRole:return track->Recording;
+    case RecordingRole:return (track->recording || track->readyToRecord);
     case RecordingChannelsRole:return QVariant();//NOT SUPPPORTED NOW
-    case PatternsRole:return (unsigned long long)&track->pattern;
+    //case PatternsRole:return PointerConverter::toString(&track->pattern);
+    case PatternsRole:return QVariant::fromValue((PatternModel*)(&(track->patternPool)));
+    case RecordingSessionRole:return QVariant::fromValue( track->currentRecordingSession );
     case PatternArrangementRole:return (unsigned long long)&track->arrangement;
     default:return QVariant();
     }
@@ -62,6 +66,7 @@ bool TrackModel::setData(const QModelIndex &index, const QVariant &value, int ro
     case RecordingChannelsRole:
         return false;//TODO implement this requires understanding of lists in QML. not now
     case PatternsRole:return false;//Do not edit pattern model pointer, shouldn't reach here
+    case RecordingSessionRole:return false;//QML cannot edit this. Only passive
     case PatternArrangementRole:return false;//Do not edit pattern group model pointer, shouldn't reach here
     default:return false;
     }
@@ -73,6 +78,7 @@ bool TrackModel::insertRows(int row, int count, const QModelIndex &parent)
     if(row <0||row >trackList.count())return false;
     beginInsertRows(parent,row,row+count-1);
     Track* track = new Track(2);
+    track->model = this;
     int id = nextTrackID++;
 
     track->name = QString("Track %1").arg(id);
@@ -101,6 +107,15 @@ bool TrackModel::removeRows(int row, int count, const QModelIndex &parent)
 
     endRemoveRows();
     return true;
+}
+
+//Used by tracks inside the model to propagate update to views
+void TrackModel::pulse(Track *t)
+{
+    int index = trackList.indexOf(t);
+    Q_ASSERT(index >= 0);
+    QModelIndex idx = this->index(index);
+    emit dataChanged(idx,idx);
 }
 /*
     enum ItemFlag {

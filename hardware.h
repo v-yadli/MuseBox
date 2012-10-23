@@ -9,6 +9,7 @@
 #include "DSP/audiointerface.h"
 #include "DSP/transpose.h"
 #include "DSP/mixer.h"
+#include "DataModel/messagebus.h"
 
 class Hardware
 {
@@ -64,6 +65,7 @@ public:
     static StereoMixer* MainMixer;
 
     static bool Monitor;
+    static MessageBus messageBus;
 
 private:
     static RtAudio* rtAudioInstance;

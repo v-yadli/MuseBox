@@ -5,6 +5,7 @@
 #include "hardware.h"
 #include "trackarrangementbackground.h"
 #include "cursorruler.h"
+#include "DataModel/patternmodel.h"
 
 
 MuseBox::MuseBox(QWidget *parent) :
@@ -13,6 +14,7 @@ MuseBox::MuseBox(QWidget *parent) :
     //TODO add a splash screen here? would be totally fun!
     qmlRegisterType<TrackArrangementBackground>("TrackArrangement",1,0,"TrackArrangementBackground");
     qmlRegisterType<CursorRuler>("TrackArrangement",1,0,"CursorRuler");
+    qmlRegisterType<PatternModel>("DataModel",1,0,"PatternModel");
     QmlApplicationViewer *view = new QmlApplicationViewer();
     view->rootContext()->setContextProperty("musebox", this);
     view->rootContext()->setContextProperty("trackModel", &this->trackModel);

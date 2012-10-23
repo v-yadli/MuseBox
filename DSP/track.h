@@ -5,6 +5,8 @@
 #include "patternnote.h"
 #include <QString>
 #include <QMap>
+#include "../DataModel/patternmodel.h"
+class TrackModel;
 class Track : public Device
 {
 public:
@@ -17,10 +19,13 @@ public:
 
     QString name;
     bool readyToRecord;//when performing an update while playing, readyToRecord flag will trigger a new recording transaction
-    bool Recording;
+    bool recording;
     QVector<int> recordingChannels;
-    QVector<Pattern*> pattern;
-    QVector<PatternNote*> arrangement;
+    PatternModel patternPool;
+    Pattern* currentRecordingPattern;
+    PatternModel* currentRecordingSession ;
+    QVector<PatternNote*> arrangement;//TODO
+    TrackModel* model;
     //QMap<Pattern*, QVector<Pattern*>*> patternGroup;//TODO create a pattern model, include it in a pattern.
 
 };

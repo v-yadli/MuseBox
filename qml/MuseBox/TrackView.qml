@@ -110,8 +110,13 @@ Image {
                 delegate: Component {
                     TrackHeader{
                         trackName: name
+                        recordingFlag: recording
                         onSelected:{
+                            main.selectTrack(index,patterns)
                             console.log(index)
+                        }
+                        onRecordingSettingChanged: {
+                            trackModel.setData(index,"recording",flag)
                         }
                         onSetTrackName:
                         {

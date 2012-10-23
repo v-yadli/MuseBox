@@ -9,6 +9,7 @@ Rectangle {
 
     signal selected()
     signal setTrackName(string newText)
+    signal recordingSettingChanged(bool flag)
 
     MouseArea{
         anchors{
@@ -29,9 +30,14 @@ Rectangle {
     }
 
     property string trackName : ""
+    property bool recordingFlag : false
     onTrackNameChanged:
     {
         tName.text=trackName
+    }
+    onRecordingFlagChanged:
+    {
+        console.log("Recording flag propagated back to qml = "+recordingFlag)
     }
 
     gradient: Gradient {
@@ -109,8 +115,52 @@ Rectangle {
 */
     HorizonDbMeter{
         id:dbMeter
-        x: 13
-        y: 25
+        x: 8
+        y: 40
+    }
+
+    Item{
+        x: 164
+        y: 34
+        width: 32
+        height: 32
+        state: "Normal"
+        MouseArea{
+            anchors.fill:parent
+            onClicked:{
+                if(recordButton.state == "Normal") {
+                    recordButton.state = "Armed"
+                    recordingSettingChanged(true)
+                }else{
+                    recordButton.state = "Normal"
+                    recordingSettingChanged(false)
+                }
+
+            }
+        }
+        Image {
+            id: recordButton
+            width:16
+            height:16
+            anchors.centerIn: parent
+            source: "TrackRecord.png"
+            states: [
+                State{
+                    name: "Normal"
+                    PropertyChanges {
+                        target: recordButton
+                        source: "TrackRecord.png"
+                    }
+                },
+                State{
+                    name: "Armed"
+                    PropertyChanges {
+                        target: recordButton
+                        source: "TrackRecordHL.png"
+                    }
+                }
+            ]
+        }
     }
 /*
     Image {

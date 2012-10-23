@@ -28,6 +28,7 @@ StereoMixer* Hardware::MainMixer;
 Transpose* Hardware::TransposeMachine;
 bool Hardware::Monitor = true;
 QVector<float> MasterLevel;
+MessageBus Hardware::messageBus;
 
 
 unsigned int ProbeDeviceId(QString devName)
@@ -91,9 +92,9 @@ float Hardware::MasterDb(int channel)
 void Hardware::DeInit()
 {
     SaveConfig();
-    //XXX: Have some problem here.
-    //When StopAudio and destruction are performed, the program frezzes
+    Lock();//Important. Otherwise the rt thread may get killed while still holding the lock
     StopAudio();
+    Unlock();
     //delete rtAudioInstance;
     //rtAudioInstance = NULL;
     //delete AudioInput;

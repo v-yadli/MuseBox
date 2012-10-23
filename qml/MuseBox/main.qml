@@ -1,6 +1,7 @@
 // import QtQuick 1.0 // to target S60 5th Edition or Maemo 5
 import QtQuick 1.1
 import "TransposeComponents"
+import DataModel 1.0
 
 Rectangle {
     id: main
@@ -42,6 +43,13 @@ Rectangle {
         }
     }
 
+    function selectTrack(index, patternModel)
+    {
+        console.log("track "+index+" selected");
+        console.log(patternModel)
+        patternList.model = patternModel
+    }
+
     Flipable {
 
         function updateTrackViewCurrentPosition(bar,beat,beatPos)
@@ -74,8 +82,16 @@ Rectangle {
         anchors.rightMargin: 0
         anchors.top: parent.top
         anchors.topMargin: 0
-        front: Rectangle{
-            anchors.fill: parent
+
+        front:ListView{
+            id:patternList
+            anchors.fill:parent
+            model:null
+            delegate:Component{
+                Text{
+                    text:name
+                }
+            }
         }
     }
 }

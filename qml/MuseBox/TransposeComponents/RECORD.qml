@@ -65,6 +65,19 @@ Rectangle {
     clip: false
     border.color: "#000000"
 
+    MouseArea{
+        anchors.fill: parent
+        onClicked: {
+            if(parent.state == "Pushed") {
+                parent.state = "Released"
+                musebox.setRecord(false)
+            }else{
+                parent.state = "Pushed"
+                musebox.setRecord(true)
+            }
+        }
+    }
+
     Image {
         id: image1
         x: 13

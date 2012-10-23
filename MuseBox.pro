@@ -48,7 +48,10 @@ SOURCES += main.cpp \
     musebox.cpp \
     DataModel/trackmodel.cpp \
     trackarrangementbackground.cpp \
-    cursorruler.cpp
+    cursorruler.cpp \
+    DataModel/patternmodel.cpp \
+    DataModel/messagebus.cpp \
+    patterndisplay.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -92,7 +95,11 @@ HEADERS += \
     musebox.h \
     DataModel/trackmodel.h \
     trackarrangementbackground.h \
-    cursorruler.h
+    cursorruler.h \
+    DataModel/patternmodel.h \
+    DataModel/pointerconverter.h \
+    DataModel/messagebus.h \
+    patterndisplay.h
 
 FORMS += \
     audioconfigurationdialog.ui

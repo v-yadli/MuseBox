@@ -50,6 +50,10 @@ void Transpose::Stop()
 
 void Transpose::SetRecord(bool flag)
 {
+    if(!flag && Recording){
+        //TODO when recording stops, terminate ongoing recordings
+    }
+    Recording = flag;
 }
 
 void Transpose::TogglePlayStop()
@@ -66,6 +70,8 @@ void Transpose::SetBPM(int BPM)
 
 void Transpose::Update()
 {
+    if(PositionJumped)
+        PositionJumped = false;
     if(Crossing(Time,Speed,barTime))
     {
         barStartTime = Time;
@@ -95,7 +101,7 @@ void Transpose::Update()
             if(Time < LoopEnd && Time + Speed >= LoopEnd)
             {
                 Time = LoopStart;
-                PositionJumped = true;//TODO better signal emitting, AKA message bus
+                PositionJumped = true;
             }else
                 Time += Speed;
         }else{
