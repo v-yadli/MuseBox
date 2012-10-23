@@ -43,7 +43,7 @@ public:
     }
     void onExit()
     {
-        //exit(0);//Surprise!!! LEAK LEAK LEAK!
+        exit(0);//Surprise!!! LEAK LEAK LEAK!
         Hardware::DeInit();
     }
 

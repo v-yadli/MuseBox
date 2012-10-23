@@ -41,8 +41,8 @@ Item {
 
     function update(ldB,rdB)// range from -100 to 0
     {
-        ldB = Math.log(ldB) / Math.LOG10E
-        rdB = Math.log(rdB) / Math.LOG10E
+        ldB = 20 * Math.log(ldB) / Math.LOG10E
+        rdB = 20 * Math.log(rdB) / Math.LOG10E
 
         if(ldB < -100)
             ldB = -100

@@ -2,6 +2,7 @@
 import QtQuick 1.1
 import "TransposeComponents"
 import DataModel 1.0
+import TrackArrangement 1.0
 
 Rectangle {
     id: main
@@ -88,8 +89,12 @@ Rectangle {
             anchors.fill:parent
             model:null
             delegate:Component{
-                Text{
-                    text:name
+                PatternDisplay{
+
+                    token: pattern
+                    height:50
+                    width:100
+                    //TODO name
                 }
             }
         }

@@ -6,7 +6,7 @@
 #include "trackarrangementbackground.h"
 #include "cursorruler.h"
 #include "DataModel/patternmodel.h"
-
+#include "patterndisplay.h"
 
 MuseBox::MuseBox(QWidget *parent) :
     QMainWindow(parent)
@@ -15,6 +15,7 @@ MuseBox::MuseBox(QWidget *parent) :
     qmlRegisterType<TrackArrangementBackground>("TrackArrangement",1,0,"TrackArrangementBackground");
     qmlRegisterType<CursorRuler>("TrackArrangement",1,0,"CursorRuler");
     qmlRegisterType<PatternModel>("DataModel",1,0,"PatternModel");
+    qmlRegisterType<PatternDisplay>("TrackArrangement",1,0,"PatternDisplay");
     QmlApplicationViewer *view = new QmlApplicationViewer();
     view->rootContext()->setContextProperty("musebox", this);
     view->rootContext()->setContextProperty("trackModel", &this->trackModel);

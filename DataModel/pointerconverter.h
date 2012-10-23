@@ -2,9 +2,9 @@
 #define POINTERCONVERTER_H
 
 #include <QString>
-inline QString toString(const void* p)
+inline const QString toString(const void* p)
 {
-    return QString("%1").arg((unsigned long long)p);
+    return QString("%1").arg((long long)p);
 }
 inline void* fromString(const QString& s)
 {

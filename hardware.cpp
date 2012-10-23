@@ -284,7 +284,7 @@ int Hardware::rtAudioCallback(void* outputBuffer, void* inputBuffer, uint nFrame
     }
 
     for(int i=0;i<OutputDeviceParameters.nChannels;++i)
-        MasterLevel[i] *= 0.1;
+        MasterLevel[i] *= 0.7;
 
     locker.unlock();
 

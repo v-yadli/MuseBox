@@ -44,12 +44,12 @@ void MixerChannel::Update()
     if(fabs(l) > _dbL)
         _dbL = fabs(l);
     else
-        _dbL *= 0.9;
+        _dbL *= 0.9999;
 
     if(fabs(r) > _dbR)
         _dbR = fabs(r);
     else
-        _dbR *= 0.9;
+        _dbR *= 0.9999;
 
     WriteOutput(0,l);
     WriteOutput(1,r);

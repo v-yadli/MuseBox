@@ -67,6 +67,12 @@ Item {
             x: 16
             y: 28
         }
+
+        Setting {
+            id: setting
+            x: 763
+            y: 28
+        }
     }
 
     Rectangle {
