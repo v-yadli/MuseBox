@@ -17,7 +17,7 @@ Rectangle {
         anchors.bottomMargin: 0
         anchors.left: parent.left
         anchors.leftMargin: 0
-        z: 1
+        z: 2
     }
 
     Timer{
@@ -44,10 +44,12 @@ Rectangle {
         }
     }
 
+    property int selectedTrack : -1
+
     function selectTrack(index, patternModel)
     {
         console.log("track "+index+" selected");
-        console.log(patternModel)
+        selectedTrack = index
         patternList.model = patternModel
     }
 
@@ -68,8 +70,7 @@ Rectangle {
         anchors.leftMargin: 0
         anchors.top: parent.top
         anchors.topMargin: 0
-        front: TrackView {
-            anchors.fill: parent
+        front:  TrackView {
             id: trackView
         }
     }
@@ -84,13 +85,56 @@ Rectangle {
         anchors.top: parent.top
         anchors.topMargin: 0
 
+        Component{
+            id: draggedNoteGenerator
+            PatternNoteDisplay{
+                property int targetTrack : -1
+            }
+        }
+
         front:ListView{
             id:patternList
+            interactive:false//TODO make a slider for it
             anchors.fill:parent
             model:null
             delegate:Component{
                 PatternDisplay{
-
+                    id: patternDisplay
+                    property variant draggedNote
+                    property int startX
+                    property int startY
+                    MouseArea{
+                        anchors.fill:parent
+                        onPressed:{
+                            draggedNote = draggedNoteGenerator.createObject(parent,
+                                                                            {
+                                                                                "x":mouseX,
+                                                                                "y":mouseY,
+                                                                                "z":5000,
+                                                                                "height":80,
+                                                                                "token":parent.token,
+                                                                                "offset":0,
+                                                                                "length":parent.length(),
+                                                                                "name":"",
+                                                                                "padding":0,
+                                                                                "targetTrack": selectedTrack
+                                                                            });
+                            draggedNote.x -= draggedNote.width / 2;
+                            draggedNote.y -= draggedNote.height / 2;
+                            startX = mouseX
+                            startY = mouseY
+                        }
+                        onPositionChanged:{
+                            draggedNote.x += mouseX - startX
+                            draggedNote.y += mouseY - startY
+                            startX = mouseX
+                            startY = mouseY
+                        }
+                        onReleased:{
+                            trackView.insertNote(draggedNote);
+                            //draggedNote.destroy() the track will destroy this
+                        }
+                    }
                     token: pattern
                     height:50
                     width:100

@@ -32,6 +32,10 @@ The PatternNoteDisplay should check, if pattern is null, then it's a dummy note.
 //Note : since the RT audio thread will make intense query on a notemodel object for samples,
 //When doing addition/deletion/modification, we must have HWLOCK
 
+struct StereoData{
+    float l,r;
+};
+
 class Track;
 class NoteModel : public QAbstractListModel
 {
@@ -56,10 +60,14 @@ public:
 
     //Track arrangement interfaces
     Q_INVOKABLE void insertNote(QString patternToken, int position);
+    Q_INVOKABLE void insertNote(QString patternToken, int bar, int beat);
     Q_INVOKABLE void removeNote(QString patternToken, int position);
     Q_INVOKABLE void moveNote(QString patternToken, int oldPosition, int newPosition);
     Q_INVOKABLE void moveNoteHead(QString patternToken, int position, int delta);
     Q_INVOKABLE void moveNoteTail(QString patternToken, int position, int delta);
+
+
+    StereoData query(int position);
 
     friend class Track;
 

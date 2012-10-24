@@ -160,4 +160,6 @@ void StereoMixer::Update()
         l += SendMixerChannels[i]->OutputChannels[0]->Data;
         r += SendMixerChannels[i]->OutputChannels[1]->Data;
     }
+    WriteOutput(0,l);
+    WriteOutput(1,r);
 }

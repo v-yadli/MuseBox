@@ -18,6 +18,7 @@ public:
     Transpose(int BPM);
     float SampleToBeats(float sampleCount);
     float BeatsToSample(float beatCount);
+    int CalculatePosition(float bar,float beat);
     float SampleToBars(float sampleCount);
     virtual void Update();
     virtual QString DeviceType(){return "Transpose";}

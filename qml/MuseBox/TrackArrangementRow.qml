@@ -6,27 +6,22 @@ import TrackArrangement 1.0
 Item {
     property NoteModel rowModel:null
     onRowModelChanged: {
-        console.log("rowModel changed")
-        console.log(rowModel)
-        //view.model = rowModel
+        view.model = rowModel
     }
     ListView{
+        anchors.fill: parent
         id:view
         orientation: ListView.Horizontal
         model: null
         delegate: Component{
             PatternNoteDisplay{
-                ListView.onAdd:{
-                    console.log("Adding pattern note")
-                }
                 id:display
-                height:10
-                width:10
-                name: name
-                token: token
-                length: length
-                offset: offset
-                padding: padding
+                height:80
+                name: notename
+                token: notepattern
+                length: notelength
+                offset: noteoffset
+                padding: notepadding
             }
         }
     }

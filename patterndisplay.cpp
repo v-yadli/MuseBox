@@ -8,6 +8,7 @@ PatternDisplay::PatternDisplay(QDeclarativeItem *parent) :
     QDeclarativeItem(parent)
 {
     QDeclarativeItem::setFlag(QGraphicsItem::ItemHasNoContents, false);
+    QDeclarativeItem::setCacheMode(ItemCoordinateCache);
     ptr = NULL;
 }
 
@@ -22,6 +23,13 @@ void PatternDisplay::setToken(const QString& _)
     ptr = (Pattern*)fromString(_);
     update();
     emit tokenChanged();
+}
+
+int PatternDisplay::length()
+{
+    if(ptr == 0)
+        return 0;
+    return ptr->length();
 }
 
 void PatternDisplay::paint(QPainter * painter, const QStyleOptionGraphicsItem *, QWidget *)

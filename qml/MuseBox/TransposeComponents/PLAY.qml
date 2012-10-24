@@ -80,6 +80,5 @@ Rectangle {
         source: "Play.png"
     }
 
-    clip: true
     border.color: "#000000"
 }

@@ -31,7 +31,6 @@ public:
     bool playStateBeforeMove;//Used to recover play state after a FF/RW action
     TrackModel trackModel;
 
-
     Q_INVOKABLE void resetAudio()
     {
         Hardware::ResetAudio();
@@ -43,6 +42,7 @@ public:
     }
     void onExit()
     {
+        Hardware::SaveConfig();
         exit(0);//Surprise!!! LEAK LEAK LEAK!
         Hardware::DeInit();
     }

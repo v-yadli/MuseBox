@@ -14,10 +14,12 @@ Item {
 
     Image {
         id: lChannel
-        width: 100
+        x: 0
+        y: 0
+        width: 150
         height: 8
-        fillMode: Image.PreserveAspectCrop
-        clip: true
+        sourceSize.width: 150
+        fillMode: Image.Tile
         anchors.top: parent.top
         anchors.topMargin: 0
         anchors.left: parent.left
@@ -27,11 +29,11 @@ Item {
 
     Image {
         id: rChannel
-        y: 100
-        width: 100
+        x: 0
+        y: 12
+        width: 150
         height: 8
-        clip: true
-        fillMode: Image.PreserveAspectCrop
+        fillMode: Image.Tile
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 0
         anchors.left: parent.left

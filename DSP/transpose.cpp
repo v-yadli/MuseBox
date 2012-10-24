@@ -126,3 +126,7 @@ float Transpose::SampleToBars(float sampleCount)
 {
     return BPM * (sampleCount / Hardware::SampleRate) / 60.0 / BarCount;
 }
+int Transpose::CalculatePosition(float bar, float beat)
+{
+    return BeatsToSample(bar * BarCount + beat);
+}

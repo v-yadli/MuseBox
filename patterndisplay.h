@@ -16,6 +16,7 @@ public:
     void paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *);
     QString token() const;
     void setToken(const QString&);
+    Q_INVOKABLE int length();//Query the length of the underlying pattern
 signals:
     void tokenChanged();
 public slots:

@@ -4,11 +4,13 @@
 #include <QBrush>
 #include <QPainter>
 #include <cmath>
+#include "DataModel/pointerconverter.h"
 
 PatternNoteDisplay::PatternNoteDisplay(QDeclarativeItem *parent) :
     QDeclarativeItem(parent)
 {
     QDeclarativeItem::setFlag(QGraphicsItem::ItemHasNoContents,false);
+    QDeclarativeItem::setCacheMode(ItemCoordinateCache);
     ptr = NULL;
 }
 
@@ -107,6 +109,7 @@ QString PatternNoteDisplay::name() const
 void PatternNoteDisplay::setToken(const QString& token)
 {
     _token = token;
+    ptr = (Pattern*)fromString(_token);
     update();
 }
 void PatternNoteDisplay::setPadding(const int padding)

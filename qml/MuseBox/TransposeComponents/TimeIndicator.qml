@@ -10,7 +10,6 @@ Rectangle {
 
     width: 100
     height: 62
-    clip: true
     gradient: Gradient {
         GradientStop {
             position: 0

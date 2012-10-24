@@ -9,6 +9,9 @@
 #include "patterndisplay.h"
 #include "patternnotedisplay.h"
 #include "DataModel/notemodel.h"
+#include <QGLWidget>
+
+using namespace QGL;
 
 MuseBox::MuseBox(QWidget *parent) :
     QMainWindow(parent)
@@ -25,6 +28,12 @@ MuseBox::MuseBox(QWidget *parent) :
     view->rootContext()->setContextProperty("trackModel", &this->trackModel);
     view->setSource(QUrl::fromLocalFile("qml/MuseBox/main.qml"));
     view->setResizeMode(QDeclarativeView::SizeRootObjectToView);
+    QGLFormat format = QGLFormat::defaultFormat();
+    format.setSampleBuffers(false);
+    QGLWidget *glWidget = new QGLWidget(format);
+    glWidget->setAutoFillBackground(false);
+    view->setViewport(glWidget);
+
     setCentralWidget(view);
     Hardware::Init();
 //    view->rootContext()->setContextProperty("transposeMachine",Hardware::TransposeMachine);

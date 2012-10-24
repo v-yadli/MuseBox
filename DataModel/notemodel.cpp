@@ -9,18 +9,18 @@ NoteModel::NoteModel(QObject *parent) :
     QAbstractListModel(parent)
 {
     QHash<int, QByteArray> roles;
-    roles[NameRole] = "name";
-    roles[PatternRole] = "pattern";
-    roles[PaddingRole] = "padding";
-    roles[OffsetRole] = "offset";
-    roles[LengthRole] = "length";
+    roles[NameRole] = "notename";
+    roles[PatternRole] = "notepattern";
+    roles[PaddingRole] = "notepadding";
+    roles[OffsetRole] = "noteoffset";
+    roles[LengthRole] = "notelength";
     setRoleNames(roles);
 
     connect((const QObject*)&Hardware::messageBus,SIGNAL(patternDeleted(Pattern*)),(const QObject*)this,SLOT(patternDeleted(Pattern*)));
     PatternNote dummyNote;
     dummyNote.pattern = NULL;
     dummyNote.length = 0;
-    dummyNote.position = -1;//So nobody can truncate this one, or remove this one.
+    dummyNote.position = -800;//So nobody can truncate this one, or remove this one.
     dummyNote.offset = 0;
 
     noteList.insert(0,dummyNote);
@@ -28,7 +28,6 @@ NoteModel::NoteModel(QObject *parent) :
 
 int NoteModel::rowCount(const QModelIndex& index) const
 {
-    qDebug()<<QString("rowCount = %1").arg(noteList.count());
     return noteList.count();
 }
 
@@ -38,7 +37,6 @@ QVariant NoteModel::data(const QModelIndex &index, int role) const
         return QVariant();
 
     int r = index.row();
-    qDebug()<<QString("data row = %1").arg(r);
     switch(role)
     {
     case NameRole:
@@ -70,6 +68,31 @@ void NoteModel::patternDeleted(Pattern *p)
     //TODO
 }
 
+StereoData NoteModel::query(int position)
+{
+    StereoData s;
+    s.l = s.r = 0;
+    if(position >= 0){
+        foreach(PatternNote p, noteList)
+        {
+            if(p.position <= position && p.position + p.length >=position)
+            {
+                int offset = position - p.position + p.offset;
+                offset %= p.pattern->length();
+                s.l = p.pattern->Get(0,offset);
+                s.r = p.pattern->Get(1,offset);
+                return s;
+            }
+        }
+    }
+    return s;
+
+}
+
+void NoteModel::insertNote(QString patternToken, int bar, int beat)
+{
+    insertNote(patternToken, Hardware::TransposeMachine->CalculatePosition(bar,beat));
+}
 void NoteModel::insertNote(QString patternToken, int position)
 {
     HWLOCK;
@@ -156,6 +179,7 @@ void NoteModel::removeNote(QString patternToken, int position)
 }
 void NoteModel::removeNote(int index)
 {
+    beginRemoveRows(QModelIndex(),index,index);
     noteList.removeAt(index);
     endRemoveRows();
     //Altered is the padding information for previous one, notify the view.

@@ -62,7 +62,6 @@ Rectangle {
         }
 
     ]
-    clip: false
     border.color: "#000000"
 
     MouseArea{

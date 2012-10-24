@@ -80,6 +80,5 @@ Rectangle {
         source: "Stop.png"
     }
 
-    clip: true
     border.color: "#000000"
 }

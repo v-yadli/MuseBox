@@ -75,6 +75,5 @@ Rectangle {
         source: "AddTrack.png"
     }
 
-    clip: true
     border.color: "#000000"
 }

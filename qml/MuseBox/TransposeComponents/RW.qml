@@ -86,6 +86,5 @@ Rectangle {
         source: "RW.png"
     }
 
-    clip: true
     border.color: "#000000"
 }

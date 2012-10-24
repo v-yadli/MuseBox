@@ -73,7 +73,7 @@ void Hardware::Init()
     Hardware::InstallDevice(MainMixer);
     Hardware::InstallDevice(TransposeMachine);
     AudioOutput->PlugInput(0,MainMixer,0);
-    AudioOutput->PlugInput(0,MainMixer,1);
+    AudioOutput->PlugInput(1,MainMixer,1);
     MasterLevel.push_back(0);
     MasterLevel.push_back(0);//Assuming stereo configuration
 }
@@ -384,11 +384,11 @@ void Hardware::UpdateComputationSequence()
         }
     }
     DeviceList = computedSequence;
-    qDebug()<<"Device computation sequence updated:";
-    foreach (Device* dev , computedSequence)
-    {
-        qDebug()<<(dev->DeviceType());
-    }
+    //qDebug()<<"Device computation sequence updated:";
+    //foreach (Device* dev , computedSequence)
+    //{
+    //    qDebug()<<(dev->DeviceType());
+    //}
     delete[] visited;
     for(int i=0;i<DeviceList.count();++i)
         delete[] graph[i];
