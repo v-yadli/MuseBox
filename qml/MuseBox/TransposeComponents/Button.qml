@@ -5,13 +5,13 @@ Rectangle {
     width: 50
     height: 70
     radius: 0
-    signal onPressed
-    signal onReleased
-    signal onPushed
+    signal pressed
+    signal released
+    signal pushed
     property string normalImage : "Stop.png"
     property string pushedImage : "StopHL.png"
     property bool latch : false
-    function pushed(){
+    function isPushed(){
         return state == "Pushed";
     }
     function release()
@@ -76,19 +76,31 @@ Rectangle {
     MouseArea{
         anchors.fill: parent
         onPressed: {
-            state = "Pushed"
-            parent.onPressed()
+            if(!latch){
+                parent.state = "Pushed"
+                parent.pressed()
+            }else{
+                if(parent.state == "Pushed")
+                    parent.state = "Normal"
+                else
+                    parent.state = "Pushed"
+            }
         }
         onReleased: {
-            state = "Normal"
-            if(!latch)
-                parent.onReleased()
+            if(!latch) {
+                parent.state = "Normal"
+                parent.released()
+            }else{
+                if(parent.state == "Normal")
+                    parent.released()
+                else
+                    parent.pushed()
+            }
         }
     }
     Image {
         id: icon
-        x: 15
-        y: 25
+        anchors.centerIn: parent
         width: 20
         height: 20
         source:  normalImage

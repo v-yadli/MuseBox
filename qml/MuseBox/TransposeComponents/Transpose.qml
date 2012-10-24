@@ -62,16 +62,77 @@ Item {
         fillMode: Image.Tile
         source: "../navy_blue.png"
 
-        AddTrack {
+        Button {
             id: addtrack
             x: 16
             y: 28
+
+            normalImage: "AddTrack.png"
+            pushedImage: "AddTrackHL.png"
+
+            onReleased:{
+                trackView.addTrack()
+            }
         }
 
-        Setting {
+        Button {
             id: setting
-            x: 763
+            x: 750
             y: 28
+            width: 51
+            height: 26
+
+            onReleased:{
+                musebox.openConfigurationDialog()
+            }
+        }
+
+        Button {
+            id: saveProjectButton
+            x: 816
+            y: 28
+            width: 70
+            height: 70
+
+            onReleased:{
+                main.saveProject()
+            }
+        }
+
+        Button {
+            id: resetAudio
+            x: 750
+            y: 72
+            width: 51
+            height: 26
+
+            onReleased: {
+                musebox.resetAudio()
+            }
+        }
+
+        Button {
+            id: newProjectButton
+            x: 898
+            y: 28
+            width: 50
+            height: 70
+
+            onReleased:{
+                main.newProject()
+            }
+        }
+
+        Button {
+            id: loadProjectButton
+            x: 964
+            y: 28
+            width: 50
+            height: 70
+
+            onReleased:{
+                main.loadProject()
+            }
         }
     }
 
@@ -97,15 +158,29 @@ Item {
                 color: "#999999"
             }
         }
-        RW {
+        Button {
             id: rw
             anchors.top: parent.top
             anchors.topMargin: 6
             anchors.left: parent.left
             anchors.leftMargin: 10
+
+            normalImage: "RW.png"
+            pushedImage: "RWHL.png"
+
+            onPressed: {
+                musebox.setSpeed(-2.0)
+                musebox.moveStart()
+            }
+
+            onReleased: {
+                musebox.setSpeed(1.0)
+                musebox.moveEnd()
+            }
+
             z: 1
         }
-        FF {
+        Button {
             id: ff
             anchors.top: parent.top
             anchors.topMargin: 6
@@ -114,6 +189,20 @@ Item {
             x: 87
             y: 40
             z: 2
+
+            normalImage: "FF.png"
+            pushedImage: "FFHL.png"
+
+            onPressed:{
+                musebox.setSpeed(2.0)
+                musebox.moveStart()
+            }
+
+            onReleased:{
+                musebox.setSpeed(1.0)
+                musebox.moveEnd()
+            }
+
         }
 
         Button {
@@ -130,7 +219,7 @@ Item {
             normalImage: "Play.png"
             pushedImage: "PlayHL.png"
             latch: true
-            onReleased:{
+            onPushed:{
                 musebox.play()
             }
         }
@@ -174,11 +263,11 @@ Item {
 
             latch: true
 
-            onReleased: {
-                if(pushed())
-                    musebox.setClick(true)
-                else
-                    musebox.setClick(false)
+            onPushed: {
+                musebox.setClick(true)
+            }
+            onReleased:{
+                musebox.setClick(false)
             }
         }
         Button {
@@ -192,11 +281,11 @@ Item {
 
             latch: true
 
-            onReleased: {
-                if(pushed())
-                    musebox.setLoop(true)
-                else
-                    musebox.setLoop(false)
+            onPushed: {
+                musebox.setLoop(true)
+            }
+            onReleased:{
+                musebox.setLoop(false)
             }
         }
 
