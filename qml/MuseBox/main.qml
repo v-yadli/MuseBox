@@ -26,14 +26,14 @@ Rectangle {
         running:true
         repeat: true
         onTriggered: {
-            var bar = musebox.getBar()
-            var beat = musebox.getBeat()
-            var min = musebox.getMinute()
-            var sec = musebox.getSecond()
-            var mil = musebox.getMillisecond()
-            var beatPos = musebox.getPositionInBeat()
-            var lStart = musebox.getLoopStart()
-            var lEnd = musebox.getLoopEnd()
+            var bar = transposeMachine.getBar()
+            var beat = transposeMachine.getBeat()
+            var min = transposeMachine.getMinute()
+            var sec = transposeMachine.getSecond()
+            var mil = transposeMachine.getMillisecond()
+            var beatPos = transposeMachine.getPositionInBeat()
+            var lStart = transposeMachine.getLoopStart()
+            var lEnd = transposeMachine.getLoopEnd()
 
             transpose.updateTimeAndBeat(min,sec,mil,bar,beat)
             trackView.setCurrentPos(bar,beat,beatPos)

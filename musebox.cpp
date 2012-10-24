@@ -28,6 +28,8 @@ MuseBox::MuseBox(QWidget *parent) :
     view->rootContext()->setContextProperty("trackModel", &this->trackModel);
     view->setSource(QUrl::fromLocalFile("qml/MuseBox/main.qml"));
     view->setResizeMode(QDeclarativeView::SizeRootObjectToView);
+
+
     QGLFormat format = QGLFormat::defaultFormat();
     format.setSampleBuffers(false);
     QGLWidget *glWidget = new QGLWidget(format);
@@ -36,6 +38,6 @@ MuseBox::MuseBox(QWidget *parent) :
 
     setCentralWidget(view);
     Hardware::Init();
-//    view->rootContext()->setContextProperty("transposeMachine",Hardware::TransposeMachine);
+    view->rootContext()->setContextProperty("transposeMachine", Hardware::TransposeMachine);
     Hardware::StartAudio();
 }

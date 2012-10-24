@@ -12,23 +12,28 @@ or query the "Time on Track" on the transpose.
 
 */
 
-class Transpose : public Device
+#include <QObject>
+class Transpose :public QObject, public Device
 {
+    Q_OBJECT
 public:
-    Transpose(int BPM);
+    Transpose(int BPM, QObject* parent = 0);
     float SampleToBeats(float sampleCount);
     float BeatsToSample(float beatCount);
     int CalculatePosition(float bar,float beat);
     float SampleToBars(float sampleCount);
     virtual void Update();
     virtual QString DeviceType(){return "Transpose";}
-    void SetBPM(int BPM);
+    Q_INVOKABLE void SetBPM(int BPM);
+    Q_INVOKABLE int GetBPM(){
+        return BPM;
+    }
     bool Crossing(float time, float delta, float unit){return ((int)((time-delta)/unit)!=(int)((time)/unit));}
-    void setCurrentPosition(int posOnGUI);
-    void setLoopStart(int posOnGUI);
-    int getLoopStart();
-    void setLoopEnd(int posOnGUI);
-    int getLoopEnd();
+    Q_INVOKABLE void setCurrentPosition(int posOnGUI);
+    Q_INVOKABLE void setLoopStart(int posOnGUI);
+    Q_INVOKABLE int getLoopStart();
+    Q_INVOKABLE void setLoopEnd(int posOnGUI);
+    Q_INVOKABLE int getLoopEnd();
 
     int BPM;
     bool Playing;
@@ -59,27 +64,27 @@ public:
 
     float getTime();//Measured in seconds
 
-    int getBar()
+    Q_INVOKABLE int getBar()
     {
         return Time / barTime;
     }
-    int getBeat()
+    Q_INVOKABLE int getBeat()
     {
         return (Time - barTime * getBar()) / beatTime;
     }
-    int getMinute()
+    Q_INVOKABLE int getMinute()
     {
         return getTime() / 60;
     }
-    int getSecond()
+    Q_INVOKABLE int getSecond()
     {
         return getTime() - getMinute()*60;
     }
-    int getMillisecond()
+    Q_INVOKABLE int getMillisecond()
     {
         return (getTime() - getMinute()*60 - getSecond()) * 1000;
     }
-    float getPositionInBeat()
+    Q_INVOKABLE float getPositionInBeat()
     {
         float bt = (Time - getBar()*barTime);
         return (bt - ((int)(bt / beatTime))*beatTime) / beatTime;
@@ -88,10 +93,10 @@ public:
     //Will be triggered when a user manually changed position, or loop triggered
     bool PositionJumped;
 
-    void Play();
-    void Stop();
-    void SetRecord(bool flag);
-    void TogglePlayStop();
+    Q_INVOKABLE void Play();
+    Q_INVOKABLE void Stop();
+    Q_INVOKABLE void SetRecord(bool flag);
+    Q_INVOKABLE void TogglePlayStop();
 
 };
 

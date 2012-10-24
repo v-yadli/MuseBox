@@ -7,6 +7,7 @@ CursorRuler::CursorRuler(QDeclarativeItem *parent) :
     QDeclarativeItem(parent)
 {
     setFlag(QGraphicsItem::ItemHasNoContents, false);
+    QDeclarativeItem::setCacheMode(ItemCoordinateCache);
     _beatCount = _unitCount = 3;
 }
 

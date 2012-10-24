@@ -34,7 +34,7 @@ Item {
 
     Timer{
         id: draggedNoteRecycleTimer
-        interval: 1000
+        interval: 50
         repeat: false
         onTriggered: {
             if(arrangementView.droppedNote !== undefined){
@@ -50,10 +50,10 @@ Item {
     }
     TrackArrangementBackground{
         z:-1
-        x:-flick.contentX
+        x:(-flick.contentX) % 120
         id:arrangementBackground
         height:parent.height
-        width:flick.contentWidth
+        width:parent.width*1.5
     }
 
     Flickable {
@@ -62,7 +62,7 @@ Item {
         z:0
         id: flick
         clip: false
-        contentWidth: 1000
+        contentWidth: 10000
 
 
         anchors{
@@ -130,6 +130,22 @@ Item {
     }
 
 
+    Item{
+        id: rulers
+        x:(-flick.contentX) % 120
+        anchors.top:parent.top
+        anchors.bottom:parent.bottom
+        width: flick.width * 1.5
+
+        CursorRuler{
+            height:10
+            unitCount: 3
+            beatCount: 3
+            anchors.left:parent.left
+            anchors.right:parent.right
+            anchors.top:parent.top
+        }
+    }
     Item{//Layer II -- cursors
         z:1
         anchors.top:parent.top
@@ -137,45 +153,37 @@ Item {
         anchors.left:parent.left
         anchors.right:parent.right
 
-        MouseArea{
-            anchors{
-                top:parent.top
-                left:parent.left
-                right:parent.right
-            }
-            height:10
-            property bool isClick : true
+        Item{
+            MouseArea{
+                anchors{
+                    top:parent.top
+                    left:parent.left
+                    right:parent.right
+                }
+                height:10
+                property bool isClick : true
 
-            onReleased:{
-                if(isClick){
-                    console.log("ruler clicked!");
-                    musebox.setCurrentPosition(mouseX);
+                onReleased:{
+                    if(isClick){
+                        console.log("ruler clicked!");
+                        transposeMachine.setCurrentPosition(mouseX);
+                    }
+                }
+                onPressed:{
+                    isClick = true
+                }
+                onPositionChanged: {
+                    isClick = false
+                    transposeMachine.setCurrentPosition(mouseX);
                 }
             }
-            onPressed:{
-                isClick = true
-            }
-            onPositionChanged: {
-                isClick = false
-                musebox.setCurrentPosition(mouseX);
-            }
-        }
 
-        Item{
+
             id: cursors
-            x:-flick.contentX
+            x:(-flick.contentX)
             anchors.top:parent.top
             anchors.bottom:parent.bottom
-            width: parent.width + 120*3
-
-            CursorRuler{
-                height:10
-                unitCount: 3
-                beatCount: 3
-                anchors.left:parent.left
-                anchors.right:parent.right
-                anchors.top:parent.top
-            }
+            width:flick.contentWidth
 
             Rectangle{
                 Rectangle{
@@ -204,7 +212,7 @@ Item {
                     height:10
                     width:10
                     onPositionChanged: {
-                        musebox.setLoopStart(mouseX + loopStartPos.x);
+                        transposeMachine.setLoopStart(mouseX + loopStartPos.x);
                     }
                 }
                 Rectangle{
@@ -237,7 +245,7 @@ Item {
                     height:10
                     width:10
                     onPositionChanged: {
-                        musebox.setLoopEnd(mouseX + loopEndPos.x);
+                        transposeMachine.setLoopEnd(mouseX + loopEndPos.x);
                     }
                 }
 
@@ -253,4 +261,5 @@ Item {
             }
         }
     }
+
 }
