@@ -95,16 +95,15 @@ bool TrackModel::insertRows(int row, int count, const QModelIndex &parent)
 
 bool TrackModel::removeRows(int row, int count, const QModelIndex &parent)
 {
-    if(count!=1)return false;
-    if(row <0||row >=trackList.count())return false;
-    beginRemoveRows(parent,row,row+count-1);
-    Track *track = trackList.takeAt(row);
-    mixerChannelList.removeAt(row);
-
+    if(row <0||row + count > trackList.count())return false;
     HWLOCK;
-
-    Hardware::RemoveDevice(track);//This will automatically desctruct the mixer channel and the track itself.
-
+    beginRemoveRows(parent,row,row+count-1);
+    for(int i=0;i<count;++i)
+    {
+        Track *track = trackList.takeAt(row);
+        mixerChannelList.removeAt(row);
+        Hardware::RemoveDevice(track);//This will automatically desctruct the mixer channel and the track itself.
+    }
     endRemoveRows();
     return true;
 }
@@ -116,6 +115,11 @@ void TrackModel::pulse(Track *t)
     Q_ASSERT(index >= 0);
     QModelIndex idx = this->index(index);
     emit dataChanged(idx,idx);
+}
+
+void TrackModel::clear()
+{
+    removeRows(0, trackList.count());
 }
 /*
     enum ItemFlag {

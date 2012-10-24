@@ -8,6 +8,25 @@ Rectangle {
     id: main
     width: 1024
     height: 768
+    property string projectName : ""
+    function resetInterface()
+    {
+        trackView.resetInterface()
+    }
+    function loadProject()
+    {
+        projectName = musebox.loadProject(projectName);
+        resetInterface();
+    }
+    function saveProject()
+    {
+        projectName = musebox.saveProject(projectName);
+    }
+    function newProject()
+    {
+        musebox.newProject();
+        resetInterface();
+    }
     Transpose{
         id:transpose
         y: 670

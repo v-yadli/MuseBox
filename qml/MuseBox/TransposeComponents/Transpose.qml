@@ -116,7 +116,7 @@ Item {
             z: 2
         }
 
-        PLAY {
+        Button {
             id: play
             anchors.top: parent.top
             anchors.topMargin: 6
@@ -126,6 +126,13 @@ Item {
             x: 187
             y: 40
             z: 4
+
+            normalImage: "Play.png"
+            pushedImage: "PlayHL.png"
+            latch: true
+            onReleased:{
+                musebox.play()
+            }
         }
         RECORD {
             id: record
@@ -138,7 +145,7 @@ Item {
             y: 40
             z: 5
         }
-        STOP {
+        Button {
             id: stop
             anchors.top: parent.top
             anchors.topMargin: 6
@@ -147,8 +154,15 @@ Item {
             x: 137
             y: 40
             z: 6
+
+            normalImage: "Stop.png"
+            pushedImage: "StopHL.png"
+            onReleased:{
+                musebox.stop()
+                play.release()
+            }
         }
-        ClickButton {
+        Button {
             id: click
             anchors.top: parent.top
             anchors.topMargin: 6
@@ -157,8 +171,17 @@ Item {
             x: 137
             y: 40
             z: 7
+
+            latch: true
+
+            onReleased: {
+                if(pushed())
+                    musebox.setClick(true)
+                else
+                    musebox.setClick(false)
+            }
         }
-        LoopButton {
+        Button {
             id: loop
             anchors.top: parent.top
             anchors.topMargin: 6
@@ -166,6 +189,15 @@ Item {
             anchors.leftMargin: 310
             y: 40
             z: 8
+
+            latch: true
+
+            onReleased: {
+                if(pushed())
+                    musebox.setLoop(true)
+                else
+                    musebox.setLoop(false)
+            }
         }
 
         TimeIndicator {

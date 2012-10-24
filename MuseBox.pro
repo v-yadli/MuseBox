@@ -42,7 +42,6 @@ SOURCES += main.cpp \
     DSP/device.cpp \
     DSP/audiointerface.cpp \
     DSP/pattern.cpp \
-    DSP/transpose.cpp \
     DSP/track.cpp \
     DSP/mixer.cpp \
     DSP/mixerchannel.cpp \
@@ -55,7 +54,8 @@ SOURCES += main.cpp \
     DataModel/messagebus.cpp \
     patterndisplay.cpp \
     DataModel/notemodel.cpp \
-    patternnotedisplay.cpp
+    patternnotedisplay.cpp \
+    DSP/transpose.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -88,7 +88,6 @@ HEADERS += \
     DSP/device.h \
     DSP/audiointerface.h \
     DSP/pattern.h \
-    DSP/transpose.h \
     DSP/track.h \
     DSP/mixer.h \
     DSP/mixerchannel.h \
@@ -105,7 +104,8 @@ HEADERS += \
     DataModel/messagebus.h \
     patterndisplay.h \
     DataModel/notemodel.h \
-    patternnotedisplay.h
+    patternnotedisplay.h \
+    DSP/transpose.h
 
 FORMS += \
     audioconfigurationdialog.ui

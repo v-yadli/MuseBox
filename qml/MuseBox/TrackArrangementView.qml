@@ -13,6 +13,10 @@ Item {
     width: 1000
     height: 500
 
+    function resetInterface()
+    {
+        flick.contentX = 0;
+    }
 
     function insertNote(draggedNote){
         arrangementView.droppedNote = draggedNote //miraculous!
@@ -48,6 +52,14 @@ Item {
     {
         arrangementView.height = h
     }
+
+    function setBeatBarCount(beatInBar,unitInBeat)
+    {
+        ruler.beatCount = beatInBar;
+        ruler.unitCount = unitInBeat;
+    }
+
+
     TrackArrangementBackground{
         z:-1
         x:(-flick.contentX) % 120
@@ -138,6 +150,7 @@ Item {
         width: flick.width * 1.5
 
         CursorRuler{
+            id:ruler
             height:10
             unitCount: 3
             beatCount: 3

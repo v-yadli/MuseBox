@@ -2,33 +2,38 @@ import QtQuick 1.1
 
 Item{
     anchors.fill:parent
-    function trackCount()
-    {
+    function trackCount() {
         return headerView.trackCount();
     }
-    function addTrack()
-    {
+    function addTrack() {
         var h =  Math.max((headerView.trackCount()+1)*80, parent.height);
         headerView.setContentHeight(h)
         arrangementView.setContentHeight(h)
         trackModel.addTrack()
         //console.log(headerView.trackCount())
     }
-    function updateDbMeter(track,l,r)
-    {
+    function updateDbMeter(track,l,r) {
         headerView.updateDbMeter(track,l,r)
     }
     function insertNote(draggedNote){
         console.log("Reached")
         arrangementView.insertNote(draggedNote)
     }
-    function setCurrentPos(bar,beat,beatPos)
-    {
+    function setCurrentPos(bar,beat,beatPos) {
         arrangementView.setCurrentPos(bar,beat,beatPos)
     }
-    function setLoopPos(lStart,lEnd)
-    {
+    function setLoopPos(lStart,lEnd) {
         arrangementView.setLoopPos(lStart,lEnd)
+    }
+
+    function setBeatBarCount(beatInBar,unitInBeat)
+    {
+        arrangementView.setBeatBarCount(beatInBar,unitInBeat);
+    }
+
+    function resetInterface()
+    {
+        arrangementView.resetInterface()
     }
 
     TrackArrangementView{

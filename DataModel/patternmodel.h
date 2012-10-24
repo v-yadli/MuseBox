@@ -19,6 +19,7 @@ public:
         SessionRole
     };
     explicit PatternModel(QObject *parent = 0);
+    ~PatternModel();
 
     //Read interfaces
     int rowCount(const QModelIndex &parent = QModelIndex())const;

@@ -43,6 +43,7 @@ public:
 
     void pulse(Track*);
 
+    void clear();
     Q_INVOKABLE void addTrack()
     {
         int cnt = trackList.count();

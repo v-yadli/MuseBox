@@ -1,10 +1,11 @@
 #include "transpose.h"
 #include "hardware.h"
 #include <cmath>
+#include <QObject>
 
 Transpose::Transpose(int BPM, QObject* parent)://A transpose is just a transpose. It has no input ports.
     //However, it must have two output ports to provide click sound & record prompt tones
-    Device(0,2),QObject(parent)
+    QObject(parent),Device(0,2)
 {
     BarCount = 3;
     BeatCount = 3;

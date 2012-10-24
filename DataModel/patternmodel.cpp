@@ -17,6 +17,19 @@ PatternModel::PatternModel(QObject *parent) :
     connect((const QObject*)&Hardware::messageBus,SIGNAL(patternDeleted(Pattern*)),(const QObject*)this,SLOT(patternDeleted(Pattern*)));
 }
 
+PatternModel::~PatternModel()
+{
+    foreach(Pattern* p, patternList)
+    {
+        if(p->recordingSession != NULL){
+            p->recordingSession = NULL;
+            if(this != p->recordingSession)
+                delete p->recordingSession;
+        }
+        delete p;
+    }
+}
+
 int PatternModel::rowCount(const QModelIndex& index) const
 {
     return patternList.count();

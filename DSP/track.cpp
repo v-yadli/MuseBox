@@ -97,3 +97,8 @@ void Track::setRecording(bool flag)
         }
     }
 }
+
+Track::~Track()
+{
+    //do not destruct the track model
+}

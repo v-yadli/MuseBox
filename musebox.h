@@ -176,6 +176,22 @@ public:
     }
 
 
+    Q_INVOKABLE QString saveProject(QString filename = "")
+    {
+    }
+    Q_INVOKABLE QString loadProject(QString filename = "")
+    {
+    }
+    Q_INVOKABLE void newProject()
+    {
+        Hardware::Lock();
+        Hardware::StopAudio();
+        Hardware::Unlock();
+
+        trackModel.clear();
+
+        Hardware::StartAudio();
+    }
 
     virtual void closeEvent(QCloseEvent *event)
     {
