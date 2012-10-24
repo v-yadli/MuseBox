@@ -114,7 +114,6 @@ public:
         return Hardware::MainMixer->InputMixerChannels[channel]->dbR();
     }
 
-
     //TODO expose TransposeMachine to QML to reduce call counts
     Q_INVOKABLE int getBar()
     {
@@ -123,6 +122,16 @@ public:
     Q_INVOKABLE int getBeat()
     {
         return Hardware::TransposeMachine->getBeat();
+    }
+    //Measured in pixels
+    Q_INVOKABLE int getLoopStart()
+    {
+        return Hardware::TransposeMachine->getLoopStart();
+    }
+    //Measured in pixels
+    Q_INVOKABLE int getLoopEnd()
+    {
+        return Hardware::TransposeMachine->getLoopEnd();
     }
     Q_INVOKABLE float getPositionInBeat()//Measured in percentage, from 0 to 1
     {
@@ -148,6 +157,24 @@ public:
     {
         return Hardware::MasterDb(1);
     }
+
+    //posOnGUI is measured in pixels
+    Q_INVOKABLE void setCurrentPosition(int posOnGUI)
+    {
+        HWLOCK;
+        Hardware::TransposeMachine->setCurrentPosition(posOnGUI);
+    }
+    Q_INVOKABLE void setLoopStart(int posOnGUI)
+    {
+        HWLOCK;
+        Hardware::TransposeMachine->setLoopStart(posOnGUI);
+    }
+    Q_INVOKABLE void setLoopEnd(int posOnGUI)
+    {
+        HWLOCK;
+        Hardware::TransposeMachine->setLoopEnd(posOnGUI);
+    }
+
 
 
     virtual void closeEvent(QCloseEvent *event)

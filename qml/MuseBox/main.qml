@@ -22,7 +22,7 @@ Rectangle {
 
     Timer{
         id:guiTimer
-        interval: 50
+        interval: 30
         running:true
         repeat: true
         onTriggered: {
@@ -32,9 +32,12 @@ Rectangle {
             var sec = musebox.getSecond()
             var mil = musebox.getMillisecond()
             var beatPos = musebox.getPositionInBeat()
+            var lStart = musebox.getLoopStart()
+            var lEnd = musebox.getLoopEnd()
 
             transpose.updateTimeAndBeat(min,sec,mil,bar,beat)
             trackView.setCurrentPos(bar,beat,beatPos)
+            trackView.setLoopPos(lStart,lEnd);
 
             transpose.updateMasterDbMeter(musebox.masterL(), musebox.masterR())
             for(var i=0;i<trackView.trackCount();++i)
@@ -54,7 +57,6 @@ Rectangle {
     }
 
     Flipable {
-
         function updateTrackViewCurrentPosition(bar,beat,beatPos)
         {
             trackView.setCurrentPos(bar,beat,beatPos)

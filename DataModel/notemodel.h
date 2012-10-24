@@ -46,7 +46,8 @@ public:
         PatternRole, //answer the pattern pointer with a qstring ( for the view to draw the pattern )
         PaddingRole, //for answering the padding property
         OffsetRole,  //for the start offset inside a pattern
-        LengthRole   //How long is this pattern note (a pattern can be looped)
+        LengthRole,   //How long is this pattern note (a pattern can be looped)
+        PositionRole   //How long is this pattern note (a pattern can be looped)
 
         //TODO other properties, such as color
     };

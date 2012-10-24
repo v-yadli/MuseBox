@@ -24,6 +24,11 @@ public:
     virtual QString DeviceType(){return "Transpose";}
     void SetBPM(int BPM);
     bool Crossing(float time, float delta, float unit){return ((int)((time-delta)/unit)!=(int)((time)/unit));}
+    void setCurrentPosition(int posOnGUI);
+    void setLoopStart(int posOnGUI);
+    int getLoopStart();
+    void setLoopEnd(int posOnGUI);
+    int getLoopEnd();
 
     int BPM;
     bool Playing;

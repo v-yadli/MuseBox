@@ -9,47 +9,61 @@ Item {
     property int unitCountInBeat : 3
     property int beatCountInBar : 3
     property int barLength : 120
-    property int beatLength : barLength / unitCountInBeat
+    property int beatLength : barLength / beatCountInBar
     width: 1000
     height: 500
 
 
     function insertNote(draggedNote){
         arrangementView.droppedNote = draggedNote //miraculous!
+        draggedNoteRecycleTimer.start()
     }
 
-    function setCurrentPos(bar,beat,beatPos)
-    {
+    function setCurrentPos(bar,beat,beatPos) {
         currentPos.x = bar*barLength + (beat+beatPos)*beatLength
     }
 
-    function setContentY(y)
+    function setLoopPos(lStart,lEnd)
     {
+        loopStartPos.x = lStart
+        loopEndPos.x = lEnd
+    }
+    function setContentY(y) {
         flick.contentY = y
+    }
+
+    Timer{
+        id: draggedNoteRecycleTimer
+        interval: 1000
+        repeat: false
+        onTriggered: {
+            if(arrangementView.droppedNote !== undefined){
+                arrangementView.droppedNote.destroy()
+                arrangementView.droppedNote = undefined
+            }
+        }
     }
 
     function setContentHeight(h)
     {
-        flick.contentHeight = h
         arrangementView.height = h
-        console.log("setContentHeight : "+h);
     }
     TrackArrangementBackground{
         z:-1
         x:-flick.contentX
         id:arrangementBackground
         height:parent.height
-        width:parent.width + 120*3
+        width:flick.contentWidth
     }
 
     Flickable {
-        z:0
-        boundsBehavior: Flickable.StopAtBounds
         flickableDirection: Flickable.HorizontalFlick
+        boundsBehavior: Flickable.StopAtBounds
+        z:0
         id: flick
         clip: false
-        contentHeight:parent.height
-        contentWidth: Math.max(width + 120*3,arrangementView.rightMost)
+        contentWidth: 1000
+
 
         anchors{
             top: parent.top
@@ -60,46 +74,56 @@ Item {
         }
         y:0
 
-        ListView{
-            y: 0
-            property int rightMost: 1000
-            property variant droppedNote : undefined
-            interactive: false
-            id: arrangementView
-            height:parent.height
-            width: rightMost//TODO : expand flick area when cannot hold new elements
-            model: trackModel
-            z:1
-            delegate : Component {
-                TrackArrangementRow{
-                    MouseArea{
-                        id: dropDetectionArea
-                        hoverEnabled: true
-                        anchors.fill: parent
-                        onPositionChanged: {
-                            if(arrangementView.droppedNote !== undefined){
-                                var note = arrangementView.droppedNote
-                                arrangementView.droppedNote = undefined
-                                if(note !== undefined)
-                                {
-                                    if(note.targetTrack !== index){
-                                        console.log("posted to wrong track. destroying.");
-                                        note.destroy()
-                                    }else{
-                                        console.log("Incoming note!!");
-                                        //TODO Snap to grid/free, currently only snapping to bar..
-                                        var bar = Math.floor(mouseX / 120)
-                                        arrangement.insertNote(note.token,bar,0);
-                                        note.destroy()
+        Item{
+            ListView{
+                y: 0
+                property int rightMost: 1000
+                property variant droppedNote : undefined
+                interactive: false
+                id: arrangementView
+                height:parent.height
+                width: rightMost//TODO : expand flick area when cannot hold new elements
+                model: trackModel
+                z:1
+                delegate : Component {
+                    TrackArrangementRow{
+                        MouseArea{
+                            z:-1
+                            id: dragDropArea
+                            property bool clicked: false
+                            property int startX:0
+                            property int startY:0
+                            hoverEnabled: true
+                            anchors.fill: parent
+                            onPositionChanged: {
+                                if(arrangementView.droppedNote !== undefined){
+                                    console.log("Collecting note");
+                                    var note = arrangementView.droppedNote
+                                    arrangementView.droppedNote = undefined
+                                    if(note !== undefined)
+                                    {
+                                        //TODO the moved note has a moving flag. So it can be returned
+                                        //Instead of destroyed
+                                        if(note.targetTrack !== index){
+                                            console.log("posted to wrong track. destroying.");
+                                            note.destroy()
+                                        }else{
+                                            console.log("Incoming note!!");
+                                            //TODO Snap to grid/free, currently only snapping to bar..
+                                            var bar = Math.floor(mouseX / 120)
+                                            arrangement.insertNote(note.token,bar,0);
+                                            note.destroy()
+                                        }
                                     }
                                 }
                             }
                         }
+                        id: arrangementRow
+                        trackIndex: index
+                        rowModel : arrangement
+                        width: parent.width
+                        height: 80
                     }
-                    id: arrangementRow
-                    rowModel : arrangement
-                    width: parent.width
-                    height: 80
                 }
             }
         }
@@ -113,6 +137,30 @@ Item {
         anchors.left:parent.left
         anchors.right:parent.right
 
+        MouseArea{
+            anchors{
+                top:parent.top
+                left:parent.left
+                right:parent.right
+            }
+            height:10
+            property bool isClick : true
+
+            onReleased:{
+                if(isClick){
+                    console.log("ruler clicked!");
+                    musebox.setCurrentPosition(mouseX);
+                }
+            }
+            onPressed:{
+                isClick = true
+            }
+            onPositionChanged: {
+                isClick = false
+                musebox.setCurrentPosition(mouseX);
+            }
+        }
+
         Item{
             id: cursors
             x:-flick.contentX
@@ -121,15 +169,22 @@ Item {
             width: parent.width + 120*3
 
             CursorRuler{
-                anchors.top:parent.top
                 height:10
                 unitCount: 3
                 beatCount: 3
                 anchors.left:parent.left
                 anchors.right:parent.right
+                anchors.top:parent.top
             }
 
             Rectangle{
+                Rectangle{
+                    x:0
+                    y:0
+                    height:5
+                    width:5
+                    color:"#0F0"
+                }
                 x:0
                 id: currentPos
                 width:1
@@ -143,6 +198,23 @@ Item {
             Rectangle{
                 x:0
                 id: loopStartPos
+                MouseArea{
+                    x:0
+                    y:0
+                    height:10
+                    width:10
+                    onPositionChanged: {
+                        musebox.setLoopStart(mouseX + loopStartPos.x);
+                    }
+                }
+                Rectangle{
+                    x:0
+                    y:0
+                    height:5
+                    width:5
+                    color:"#F00"
+                }
+
                 width:1
                 anchors{
                     top:parent.top
@@ -152,6 +224,23 @@ Item {
                 color: "#F00"
             }
             Rectangle{
+                Rectangle{
+                    x:0
+                    y:0
+                    height:5
+                    width:5
+                    color:"#00F"
+                }
+                MouseArea{
+                    x:0
+                    y:0
+                    height:10
+                    width:10
+                    onPositionChanged: {
+                        musebox.setLoopEnd(mouseX + loopEndPos.x);
+                    }
+                }
+
                 x: barLength
                 id: loopEndPos
                 width:1

@@ -33,6 +33,38 @@ Transpose::Transpose(int BPM)://A transpose is just a transpose. It has no input
     }
 }
 
+void Transpose::setCurrentPosition(int posOnGUI)
+{
+    PositionJumped = true;
+    Time = (posOnGUI / 120.0) * BeatsToSample(BarCount);
+}
+void Transpose::setLoopStart(int posOnGUI)
+{
+    LoopStart = ((int)(posOnGUI / 120.0)) * BeatsToSample(BarCount);
+    if(LoopEnd < LoopStart)
+    {
+        LoopEnd = LoopStart+ BeatsToSample(BarCount);
+    }
+}
+void Transpose::setLoopEnd(int posOnGUI)
+{
+    LoopEnd = ((int)(posOnGUI / 120.0)) * BeatsToSample(BarCount);
+    if(LoopEnd < LoopStart)
+    {
+        LoopStart = LoopEnd - BeatsToSample(BarCount);
+        if(LoopStart < 0)
+            LoopStart = 0;
+    }
+}
+int Transpose::getLoopStart()
+{
+    return SampleToBars(LoopStart)  * 120.0;
+}
+int Transpose::getLoopEnd()
+{
+    return SampleToBars(LoopEnd)  * 120.0;
+}
+
 void Transpose::Play()
 {
     Playing = true;

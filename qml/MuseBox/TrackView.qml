@@ -19,11 +19,16 @@ Item{
         headerView.updateDbMeter(track,l,r)
     }
     function insertNote(draggedNote){
+        console.log("Reached")
         arrangementView.insertNote(draggedNote)
     }
     function setCurrentPos(bar,beat,beatPos)
     {
         arrangementView.setCurrentPos(bar,beat,beatPos)
+    }
+    function setLoopPos(lStart,lEnd)
+    {
+        arrangementView.setLoopPos(lStart,lEnd)
     }
 
     TrackArrangementView{

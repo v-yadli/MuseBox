@@ -96,7 +96,10 @@ int PatternNoteDisplay::offset() const
 {
     return _offset;
 }
-
+int PatternNoteDisplay::position() const
+{
+    return _position;
+}
 int PatternNoteDisplay::length() const
 {
     return _length;
@@ -117,6 +120,10 @@ void PatternNoteDisplay::setPadding(const int padding)
     _padding = padding;
     emit paddingChanged();
     update();
+}
+void PatternNoteDisplay::setPosition(const int p)
+{
+    _position = p;
 }
 void PatternNoteDisplay::setOffset(const int offset)
 {

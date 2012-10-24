@@ -71,9 +71,6 @@ void Track::Update()
     }
 }
 
-int offset = 0;
-int idx = 0;
-
 void Track::setRecording(bool flag)
 {
     if(flag)
@@ -95,14 +92,6 @@ void Track::setRecording(bool flag)
             //dump data into pool
             qDebug()<<QString("recorded %1 patterns!").arg(currentRecordingSession->rowCount());
             patternPool.import(currentRecordingSession);
-            Pattern* p = currentRecordingSession->Get(0);
-            PatternNote note;
-            note.pattern = p;
-            note.position = offset;
-            note.length = p->length();
-            note.offset = 0;
-            offset += p->length();
-            arrangement.insertNote(note,note.position);
             currentRecordingSession = NULL;
             currentRecordingPattern = NULL;
         }

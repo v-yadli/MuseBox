@@ -48,20 +48,20 @@ MixerChannel *StereoMixer::InsertInputDevice(int index,Device *dev)
     StereoEP* e = new StereoEP();
     InputMixerChannels.insert(index,d);
     InputEPs.insert(index,e);
-    InsertInputChannel(index,2);
+    InsertInputChannel(index*2,2);
     switch(dev->OutputChannelCount)
     {
     case 1:
         d->InputChannels[0] = &e->l;
         d->InputChannels[1] = &e->l;
-        PlugInput(index,dev,0);
-        PlugInput(index+1,dev,0);
+        PlugInput(index*2,dev,0);
+        PlugInput(index*2+1,dev,0);
         break;
     case 2:
         d->InputChannels[0] = &e->l;
         d->InputChannels[1] = &e->r;
-        PlugInput(index,dev,0);
-        PlugInput(index+1,dev,1);
+        PlugInput(index*2,dev,0);
+        PlugInput(index*2+1,dev,1);
         break;
     }
     return (MixerChannel*)d;

@@ -14,6 +14,7 @@ NoteModel::NoteModel(QObject *parent) :
     roles[PaddingRole] = "notepadding";
     roles[OffsetRole] = "noteoffset";
     roles[LengthRole] = "notelength";
+    roles[PositionRole] = "noteposition";
     setRoleNames(roles);
 
     connect((const QObject*)&Hardware::messageBus,SIGNAL(patternDeleted(Pattern*)),(const QObject*)this,SLOT(patternDeleted(Pattern*)));
@@ -39,6 +40,8 @@ QVariant NoteModel::data(const QModelIndex &index, int role) const
     int r = index.row();
     switch(role)
     {
+    case PositionRole:
+        return noteList[r].position;
     case NameRole:
         if(noteList[r].pattern != 0){
             return noteList[r].pattern->name;
@@ -151,7 +154,6 @@ void NoteModel::insertNote(PatternNote& note, int position)
     QModelIndex idx = index(i-1);
     emit dataChanged(idx,idx);
 }
-
 
 void NoteModel::removeNote(QString patternToken, int position)
 {
