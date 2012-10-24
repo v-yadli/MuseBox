@@ -34,6 +34,8 @@ public:
     Q_INVOKABLE int getLoopStart();
     Q_INVOKABLE void setLoopEnd(int posOnGUI);
     Q_INVOKABLE int getLoopEnd();
+    Q_INVOKABLE int getBeatCount(){return beatCount;}
+    Q_INVOKABLE int getUnitCount(){return unitCount;}
 
     int BPM;
     bool Playing;
@@ -41,8 +43,8 @@ public:
     bool Click;
     float ClickLevel;
 
-    int BarCount; //How many beats in a bar
-    int BeatCount; //How many units in a beat
+    int beatCount; //How many beats in a bar
+    int unitCount; //How many units in a beat
 
     int LoopStart;
     int LoopEnd;

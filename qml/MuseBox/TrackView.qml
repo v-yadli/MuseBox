@@ -34,6 +34,7 @@ Item{
     function resetInterface()
     {
         arrangementView.resetInterface()
+        headerView.resetInterface()
     }
 
     TrackArrangementView{

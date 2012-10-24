@@ -7,8 +7,8 @@ Transpose::Transpose(int BPM, QObject* parent)://A transpose is just a transpose
     //However, it must have two output ports to provide click sound & record prompt tones
     QObject(parent),Device(0,2)
 {
-    BarCount = 3;
-    BeatCount = 3;
+    beatCount = 3;
+    unitCount = 3;
     SetBPM(BPM);
     Recording = false;
     Playing = false;
@@ -19,7 +19,7 @@ Transpose::Transpose(int BPM, QObject* parent)://A transpose is just a transpose
 
     LoopStart = 0;
     Time = 0;
-    LoopEnd = BeatsToSample(BarCount);
+    LoopEnd = BeatsToSample(beatCount);
 
     Playing = false;
 
@@ -37,22 +37,22 @@ Transpose::Transpose(int BPM, QObject* parent)://A transpose is just a transpose
 void Transpose::setCurrentPosition(int posOnGUI)
 {
     PositionJumped = true;
-    Time = (posOnGUI / 120.0) * BeatsToSample(BarCount);
+    Time = (posOnGUI / 120.0) * BeatsToSample(beatCount);
 }
 void Transpose::setLoopStart(int posOnGUI)
 {
-    LoopStart = ((int)(posOnGUI / 120.0)) * BeatsToSample(BarCount);
+    LoopStart = ((int)(posOnGUI / 120.0)) * BeatsToSample(beatCount);
     if(LoopEnd < LoopStart)
     {
-        LoopEnd = LoopStart+ BeatsToSample(BarCount);
+        LoopEnd = LoopStart+ BeatsToSample(beatCount);
     }
 }
 void Transpose::setLoopEnd(int posOnGUI)
 {
-    LoopEnd = ((int)(posOnGUI / 120.0)) * BeatsToSample(BarCount);
+    LoopEnd = ((int)(posOnGUI / 120.0)) * BeatsToSample(beatCount);
     if(LoopEnd < LoopStart)
     {
-        LoopStart = LoopEnd - BeatsToSample(BarCount);
+        LoopStart = LoopEnd - BeatsToSample(beatCount);
         if(LoopStart < 0)
             LoopStart = 0;
     }
@@ -97,7 +97,7 @@ void Transpose::TogglePlayStop()
 void Transpose::SetBPM(int BPM)
 {
     this->BPM = BPM;
-    barTime = BeatsToSample(BarCount);
+    barTime = BeatsToSample(beatCount);
     beatTime = BeatsToSample(1);
 }
 
@@ -157,9 +157,9 @@ float Transpose::BeatsToSample(float beatCount)
 
 float Transpose::SampleToBars(float sampleCount)
 {
-    return BPM * (sampleCount / Hardware::SampleRate) / 60.0 / BarCount;
+    return BPM * (sampleCount / Hardware::SampleRate) / 60.0 / beatCount;
 }
 int Transpose::CalculatePosition(float bar, float beat)
 {
-    return BeatsToSample(bar * BarCount + beat);
+    return BeatsToSample(bar * beatCount + beat);
 }

@@ -16,6 +16,9 @@ Item {
     function resetInterface()
     {
         flick.contentX = 0;
+        beatCountInBar = transposeMachine.getBeatCount()
+        unitCountInBeat = transposeMachine.getUnitCount()
+        beatLength = barLength / beatCountInBar
     }
 
     function insertNote(draggedNote){
@@ -57,6 +60,8 @@ Item {
     {
         ruler.beatCount = beatInBar;
         ruler.unitCount = unitInBeat;
+        musebox.setLoopStart(0)
+        musebox.setLoopEnd(120)
     }
 
 
@@ -152,8 +157,8 @@ Item {
         CursorRuler{
             id:ruler
             height:10
-            unitCount: 3
-            beatCount: 3
+            unitCount: unitCountInBeat
+            beatCount: beatCountInBar
             anchors.left:parent.left
             anchors.right:parent.right
             anchors.top:parent.top

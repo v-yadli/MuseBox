@@ -11,6 +11,7 @@ Rectangle {
     property string projectName : ""
     function resetInterface()
     {
+        patternList.model = null
         trackView.resetInterface()
     }
     function loadProject()
@@ -24,8 +25,14 @@ Rectangle {
     }
     function newProject()
     {
+        console.log("Entering new project")
+
+        guiTimer.stop()
+
         musebox.newProject();
         resetInterface();
+
+        guiTimer.start()
     }
     Transpose{
         id:transpose

@@ -96,6 +96,8 @@ bool TrackModel::insertRows(int row, int count, const QModelIndex &parent)
 bool TrackModel::removeRows(int row, int count, const QModelIndex &parent)
 {
     if(row <0||row + count > trackList.count())return false;
+    if(count == 0)
+        return true;
     HWLOCK;
     beginRemoveRows(parent,row,row+count-1);
     for(int i=0;i<count;++i)
@@ -120,6 +122,7 @@ void TrackModel::pulse(Track *t)
 void TrackModel::clear()
 {
     removeRows(0, trackList.count());
+    nextTrackID = 1;
 }
 /*
     enum ItemFlag {

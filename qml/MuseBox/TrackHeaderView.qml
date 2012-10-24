@@ -25,6 +25,11 @@ Rectangle{
     {
         return headerView.count;
     }
+    function resetInterface()
+    {
+        headerView.width = 0
+        headerView.width = 200
+    }
     function updateDbMeter(track,l,r)
     {
         headerView.currentIndex=track

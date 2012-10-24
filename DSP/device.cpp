@@ -99,7 +99,7 @@ void Device::InsertInputChannel(int index, int channelCount)
 
 void Device::RemoveInputChannel(int Index, int count)
 {
-    Q_ASSERT(( (Index > 0) &&  (Index <= InputChannelCount - count)));
+    Q_ASSERT(( (Index >= 0) &&  (Index <= InputChannelCount - count)));
     Q_ASSERT(count <= InputChannelCount);
 
     EndPoint** newICp = new EndPoint*[InputChannelCount - count];

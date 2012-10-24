@@ -8,6 +8,7 @@
 #include <QDebug>
 #include <QMainWindow>
 #include <DataModel/trackmodel.h>
+#include "newprojectdialog.h"
 
 //Main MuseBox class. Handles Track addition/remove logic, interaction between audio engine and GUI, and file load/save.
 
@@ -188,7 +189,14 @@ public:
         Hardware::StopAudio();
         Hardware::Unlock();
 
-        trackModel.clear();
+        NewProjectDialog dialog;
+        if( QDialog::Accepted == dialog.exec())
+        {
+            trackModel.clear();
+            Hardware::TransposeMachine->beatCount = dialog.beatCount;
+            Hardware::TransposeMachine->unitCount = dialog.unitCount;
+            Hardware::TransposeMachine->SetBPM(dialog.bpm);
+        }
 
         Hardware::StartAudio();
     }

@@ -55,7 +55,8 @@ SOURCES += main.cpp \
     patterndisplay.cpp \
     DataModel/notemodel.cpp \
     patternnotedisplay.cpp \
-    DSP/transpose.cpp
+    DSP/transpose.cpp \
+    newprojectdialog.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -105,7 +106,9 @@ HEADERS += \
     patterndisplay.h \
     DataModel/notemodel.h \
     patternnotedisplay.h \
-    DSP/transpose.h
+    DSP/transpose.h \
+    newprojectdialog.h
 
 FORMS += \
-    audioconfigurationdialog.ui
+    audioconfigurationdialog.ui \
+    newprojectdialog.ui
