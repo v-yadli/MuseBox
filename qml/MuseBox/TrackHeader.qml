@@ -23,6 +23,8 @@ Rectangle {
             {
                 tNameEdit.visible = false
                 tName.visible = true
+                tName.focus = true
+                tName.forceActiveFocus = true
                 setTrackName(tNameEdit.text)
             }
             selected()

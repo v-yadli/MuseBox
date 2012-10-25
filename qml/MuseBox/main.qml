@@ -11,17 +11,26 @@ Rectangle {
     property string projectName : ""
     function resetInterface()
     {
-        patternList.model = null
+        patternList.currentModel = undefined
         trackView.resetInterface()
+    }
+    function exportSong(){
+        guiTimer.stop()
+        musebox.exportSong()
+        guiTimer.start()
     }
     function loadProject()
     {
-        projectName = musebox.loadProject(projectName);
+        guiTimer.stop()
+        projectName = musebox.loadProject("");
         resetInterface();
+        guiTimer.start()
     }
     function saveProject()
     {
+        guiTimer.stop()
         projectName = musebox.saveProject(projectName);
+        guiTimer.start()
     }
     function newProject()
     {
@@ -34,6 +43,16 @@ Rectangle {
 
         guiTimer.start()
     }
+
+    property int selectedTrack : -1
+
+    function selectTrack(index, patternModel)
+    {
+        console.log("track "+index+" selected");
+        selectedTrack = index
+        patternList.currentModel = patternModel
+    }
+
     Transpose{
         id:transpose
         y: 670
@@ -51,7 +70,10 @@ Rectangle {
         interval: 30
         running:true
         repeat: true
+        property bool entered : false
         onTriggered: {
+            if(entered)return;
+            entered = true
             var bar = transposeMachine.getBar()
             var beat = transposeMachine.getBeat()
             var min = transposeMachine.getMinute()
@@ -60,6 +82,8 @@ Rectangle {
             var beatPos = transposeMachine.getPositionInBeat()
             var lStart = transposeMachine.getLoopStart()
             var lEnd = transposeMachine.getLoopEnd()
+
+            trackView.checkTrackCount()//Weird...
 
             transpose.updateTimeAndBeat(min,sec,mil,bar,beat)
             trackView.setCurrentPos(bar,beat,beatPos)
@@ -70,16 +94,8 @@ Rectangle {
             {
                 trackView.updateDbMeter(i,musebox.query_dBL(i),musebox.query_dBR(i))
             }
+            entered = false
         }
-    }
-
-    property int selectedTrack : -1
-
-    function selectTrack(index, patternModel)
-    {
-        console.log("track "+index+" selected");
-        selectedTrack = index
-        patternList.model = patternModel
     }
 
     Flipable {
@@ -120,55 +136,9 @@ Rectangle {
             }
         }
 
-        front:ListView{
+        front: PatternList{
             id:patternList
-            interactive:false//TODO make a slider for it
-            anchors.fill:parent
-            model:null
-            delegate:Component{
-                PatternDisplay{
-                    id: patternDisplay
-                    property variant draggedNote
-                    property int startX
-                    property int startY
-                    MouseArea{
-                        anchors.fill:parent
-                        onPressed:{
-                            draggedNote = draggedNoteGenerator.createObject(parent,
-                                                                            {
-                                                                                "x":mouseX,
-                                                                                "y":mouseY,
-                                                                                "z":5000,
-                                                                                "height":80,
-                                                                                "token":parent.token,
-                                                                                "offset":0,
-                                                                                "length":parent.length(),
-                                                                                "name":"",
-                                                                                "padding":0,
-                                                                                "targetTrack": selectedTrack
-                                                                            });
-                            draggedNote.x -= draggedNote.width / 2;
-                            draggedNote.y -= draggedNote.height / 2;
-                            startX = mouseX
-                            startY = mouseY
-                        }
-                        onPositionChanged:{
-                            draggedNote.x += mouseX - startX
-                            draggedNote.y += mouseY - startY
-                            startX = mouseX
-                            startY = mouseY
-                        }
-                        onReleased:{
-                            trackView.insertNote(draggedNote);
-                            //draggedNote.destroy() the track will destroy this
-                        }
-                    }
-                    token: pattern
-                    height:50
-                    width:100
-                    //TODO name
-                }
-            }
+            currentModel:undefined
         }
     }
 }

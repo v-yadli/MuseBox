@@ -89,7 +89,8 @@ Rectangle {
         onReleased: {
             if(!latch) {
                 parent.state = "Normal"
-                parent.released()
+                if(mouseX >= 0 && mouseY >= 0 && mouseX < width && mouseY < height)
+                    parent.released()
             }else{
                 if(parent.state == "Normal")
                     parent.released()

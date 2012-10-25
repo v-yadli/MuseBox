@@ -91,7 +91,7 @@ Item {
             id: saveProjectButton
             x: 816
             y: 28
-            width: 70
+            width: 50
             height: 70
 
             onReleased:{
@@ -113,10 +113,10 @@ Item {
 
         Button {
             id: newProjectButton
-            x: 898
-            y: 28
+            x: 877
+            y: 72
             width: 50
-            height: 70
+            height: 26
 
             onReleased:{
                 main.newProject()
@@ -125,13 +125,25 @@ Item {
 
         Button {
             id: loadProjectButton
-            x: 964
+            x: 877
+            y: 28
+            width: 50
+            height: 26
+
+            onReleased:{
+                main.loadProject()
+            }
+        }
+
+        Button {
+            id: exportButton
+            x: 941
             y: 28
             width: 50
             height: 70
 
             onReleased:{
-                main.loadProject()
+                main.exportSong()
             }
         }
     }

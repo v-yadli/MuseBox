@@ -67,6 +67,12 @@ public:
     Q_INVOKABLE void moveNoteHead(QString patternToken, int position, int delta);
     Q_INVOKABLE void moveNoteTail(QString patternToken, int position, int delta);
 
+    //These are internal routines. Hold HWLOCK or stop audio before calling these.
+    QList<PatternNote> noteList;
+    void insertNote(PatternNote& note,int position);
+    void moveNoteHead(int index, int delta);
+    void moveNoteTail(int index, int delta);
+    void removeNote(int index);
 
     StereoData query(int position);
 
@@ -78,12 +84,6 @@ public slots:
     void patternDeleted(Pattern*);
     void onBPMChange(double oldBPM, double newBPM);//TODO
 
-private :
-    QList<PatternNote> noteList;
-    void insertNote(PatternNote& note,int position);
-    void moveNoteHead(int index, int delta);
-    void moveNoteTail(int index, int delta);
-    void removeNote(int index);
 };
 
 Q_DECLARE_METATYPE(NoteModel*)

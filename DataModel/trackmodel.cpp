@@ -4,6 +4,9 @@
 #include <QDebug>
 #include <QByteArray>
 #include "pointerconverter.h"
+#include <QMap>
+#include <QFile>
+#include <QDataStream>
 
 TrackModel::TrackModel(QObject *parent) :
     QAbstractListModel(parent)
@@ -82,6 +85,9 @@ bool TrackModel::insertRows(int row, int count, const QModelIndex &parent)
     int id = nextTrackID++;
 
     track->name = QString("Track %1").arg(id);
+
+    emit prepareToAddTrack();
+
     trackList.insert(row, track);
 
     HWLOCK;
@@ -108,6 +114,150 @@ bool TrackModel::removeRows(int row, int count, const QModelIndex &parent)
     }
     endRemoveRows();
     return true;
+}
+
+/*
+File format:
+
+BPM(4B)
+BeatCount(4B)
+UnitCount(4B)
+
+Recording transaction count(4B)
+Pattern count(4B)
+Pattern data...                    <- the index of the sample will be used in track reconstruction
+    Recording transaction ID(4B)  <- after reading this, insert into corresponding recording transaction
+    Name(readByte/writeByte)
+    Length(4B)
+    Sample points...
+Track count(4B)
+Track data...
+    pattern pool size(4B)
+        sample IDs...(4B each)
+    arrangement size(4B)
+        arrangement data...         <- guaranteed order
+            Pattern ID(4B)
+            offset(4B)
+            length(4B)
+            position(4B)
+*/
+
+void TrackModel::saveFile(QString filename)
+{
+    QMap<Pattern*,int> patternIDMapper;
+    QMap<PatternModel*,int> patternModelIDMapper;
+    QVector<Pattern*> patternList;
+    QFile file(filename);
+    file.open(QIODevice::WriteOnly);
+    QDataStream stream(&file);
+    int patternCount = 0;
+    int patternModelCount = 0;//for recording transactions
+
+    stream<<Hardware::TransposeMachine->BPM<<Hardware::TransposeMachine->beatCount<<Hardware::TransposeMachine->unitCount;
+
+    foreach(Track* t, trackList){
+        foreach(Pattern* p, t->patternPool.patternList)
+        {
+            if(!patternIDMapper.contains(p))
+            {
+                patternIDMapper[p] = patternCount++;
+                patternList.push_back(p);
+            }
+            if(!patternModelIDMapper.contains(p->recordingSession)){
+                patternModelIDMapper[p->recordingSession] = patternModelCount++;
+            }
+        }
+    }
+    //pattern list ready
+    stream<<patternModelCount<<patternCount;
+    foreach(Pattern* p, patternList){
+        stream<<patternModelIDMapper[p->recordingSession];
+        QByteArray name = p->name.toLocal8Bit();
+        stream.writeBytes(name.data(),name.length());
+        p->serializeData(stream);
+    }
+    stream<<trackList.count();
+    foreach(Track* t, trackList)
+    {
+        stream<<t->patternPool.count();
+        foreach(Pattern* p, t->patternPool.patternList)
+        {
+            stream<<patternIDMapper[p];
+        }
+        stream<<t->arrangement.noteList.count();
+        foreach(PatternNote n, t->arrangement.noteList)
+        {
+            stream<<patternIDMapper[n.pattern]<<n.offset<<n.length<<n.position;
+        }
+    }
+    file.close();
+}
+
+void TrackModel::loadFile(QString filename)
+{
+    QFile file(filename);
+    file.open(QIODevice::ReadOnly);
+    QDataStream stream(&file);
+
+    clear();
+
+    QVector<Pattern*> patternList;
+    QVector<PatternModel*> patternModelList;
+    int patternModelCount,patternCount;
+
+    int beatCount,unitCount,bpm;
+    stream>>bpm>>beatCount>>unitCount;
+    Hardware::TransposeMachine->beatCount = beatCount;
+    Hardware::TransposeMachine->unitCount = unitCount;
+    Hardware::TransposeMachine->SetBPM(bpm);
+
+    stream>>patternModelCount>>patternCount;
+    for(int i=0;i<patternModelCount;++i){
+        patternModelList.push_back(new PatternModel());
+    }
+    for(int i=0;i<patternCount;++i)
+    {
+        Pattern* p = new Pattern();//TODO handle different channel count. currently only 2
+        int recTrans;
+        stream>>recTrans;
+        patternList.push_back(p);
+        p->recordingSession = patternModelList[recTrans];
+        p->recordingSession->patternList.push_back(p);
+        char* namePtr;
+        uint nameLen;
+        stream.readBytes(namePtr,nameLen);
+        p->name= QString::fromLocal8Bit(namePtr,nameLen);
+        delete[] namePtr;
+        p->deserializeData(stream);
+    }
+
+    int trackCount;
+    stream>>trackCount;
+    for(int i=0;i<trackCount;++i)
+    {
+        addTrack();
+        int poolSize;
+        stream>>poolSize;
+        for(int j=0;j<poolSize;++j){
+            int sampleID;
+            stream>>sampleID;
+            trackList[i]->patternPool.patternList.push_back(patternList[sampleID]);
+        }
+        int arrangementSize;
+        stream>>arrangementSize;
+        for(int j=0;j<arrangementSize;++j){
+            int patternID,offset,length,position;
+            stream>>patternID>>offset>>length>>position;
+            PatternNote note;
+            note.pattern = patternList[patternID];
+            note.offset = offset;
+            note.length = length;
+            note.position = position;
+            trackList[i]->arrangement.insertNote(note,position);
+        }
+    }
+
+    file.close();
 }
 
 //Used by tracks inside the model to propagate update to views

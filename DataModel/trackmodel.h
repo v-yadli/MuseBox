@@ -5,6 +5,7 @@
 #include <QList>
 #include "../DSP/track.h"
 #include "../DSP/mixerchannel.h"
+#include <QString>
 
 /***
  TrackModel defines a uniformed model for the track view, including
@@ -40,10 +41,15 @@ public:
     //Add/remove interfaces
     bool insertRows ( int row, int count, const QModelIndex & parent = QModelIndex() );
     bool removeRows ( int row, int count, const QModelIndex & parent = QModelIndex() );
+    void saveFile(QString filename);
+    void loadFile(QString filename);
 
     void pulse(Track*);
 
     void clear();
+    Q_INVOKABLE int count(){
+        return trackList.count();
+    }
     Q_INVOKABLE void addTrack()
     {
         int cnt = trackList.count();
@@ -59,6 +65,8 @@ public:
     QList<Track*> trackList;
     QList<MixerChannel*> mixerChannelList;
 
+signals:
+    void prepareToAddTrack();
 private:
     int nextTrackID;
     

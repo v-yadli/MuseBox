@@ -56,7 +56,8 @@ SOURCES += main.cpp \
     DataModel/notemodel.cpp \
     patternnotedisplay.cpp \
     DSP/transpose.cpp \
-    newprojectdialog.cpp
+    newprojectdialog.cpp \
+    exportaudiodialog.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -107,8 +108,15 @@ HEADERS += \
     DataModel/notemodel.h \
     patternnotedisplay.h \
     DSP/transpose.h \
-    newprojectdialog.h
+    newprojectdialog.h \
+    exportaudiodialog.h
 
 FORMS += \
     audioconfigurationdialog.ui \
-    newprojectdialog.ui
+    newprojectdialog.ui \
+    exportaudiodialog.ui
+
+win32: LIBS += -L$$PWD/libsndfile/ -llibsndfile-1
+
+INCLUDEPATH += $$PWD/libsndfile
+DEPENDPATH += $$PWD/libsndfile

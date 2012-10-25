@@ -5,10 +5,20 @@ Item{
     function trackCount() {
         return headerView.trackCount();
     }
-    function addTrack() {
+    Component.onCompleted: {
+        console.log("track view loaded")
+        trackModel.prepareToAddTrack.connect(prepareToAddTrack);
+    }
+    function checkTrackCount(){
+        headerView.checkTrackCount();
+    }
+    function prepareToAddTrack() {
+        console.log("prepareToAddTrack");
         var h =  Math.max((headerView.trackCount()+1)*80, parent.height);
         headerView.setContentHeight(h)
         arrangementView.setContentHeight(h)
+    }
+    function addTrack() {
         trackModel.addTrack()
         //console.log(headerView.trackCount())
     }

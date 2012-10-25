@@ -9,6 +9,9 @@
 #include <QMainWindow>
 #include <DataModel/trackmodel.h>
 #include "newprojectdialog.h"
+#include "exportaudiodialog.h"
+#include <QFileDialog>
+#include <sndfile.h>
 
 //Main MuseBox class. Handles Track addition/remove logic, interaction between audio engine and GUI, and file load/save.
 
@@ -115,41 +118,6 @@ public:
         return Hardware::MainMixer->InputMixerChannels[channel]->dbR();
     }
 
-    //TODO expose TransposeMachine to QML to reduce call counts
-    Q_INVOKABLE int getBar()
-    {
-        return Hardware::TransposeMachine->getBar();
-    }
-    Q_INVOKABLE int getBeat()
-    {
-        return Hardware::TransposeMachine->getBeat();
-    }
-    //Measured in pixels
-    Q_INVOKABLE int getLoopStart()
-    {
-        return Hardware::TransposeMachine->getLoopStart();
-    }
-    //Measured in pixels
-    Q_INVOKABLE int getLoopEnd()
-    {
-        return Hardware::TransposeMachine->getLoopEnd();
-    }
-    Q_INVOKABLE float getPositionInBeat()//Measured in percentage, from 0 to 1
-    {
-        return Hardware::TransposeMachine->getPositionInBeat();
-    }
-    Q_INVOKABLE int getMinute()
-    {
-        return Hardware::TransposeMachine->getMinute();
-    }
-    Q_INVOKABLE int getSecond()
-    {
-        return Hardware::TransposeMachine->getSecond();
-    }
-    Q_INVOKABLE int getMillisecond()
-    {
-        return Hardware::TransposeMachine->getMillisecond();
-    }
     Q_INVOKABLE float masterL()
     {
         return Hardware::MasterDb(0);
@@ -179,9 +147,25 @@ public:
 
     Q_INVOKABLE QString saveProject(QString filename = "")
     {
+        if(filename == ""){
+            filename = QFileDialog::getSaveFileName(this, "Save to...",QString(),"*.mb",NULL,0);
+        }
+        if(filename != "")
+        {
+            trackModel.saveFile(filename);
+        }
+        return filename;
     }
     Q_INVOKABLE QString loadProject(QString filename = "")
     {
+        if(filename == ""){
+            filename = QFileDialog::getOpenFileName(this, "Open...",QString(),"*.mb",NULL,0);
+        }
+        if(filename != "")
+        {
+            trackModel.loadFile(filename);
+        }
+        return filename;
     }
     Q_INVOKABLE void newProject()
     {
@@ -199,6 +183,67 @@ public:
         }
 
         Hardware::StartAudio();
+    }
+    Q_INVOKABLE void exportSong(){
+        Hardware::StopAudio();
+        ExportAudioDialog dialog(this);
+        if(QDialog::Accepted != dialog.exec())
+            return;
+
+        int loopStart,loopEnd,time;
+        loopStart = Hardware::TransposeMachine->LoopStart;
+        loopEnd = Hardware::TransposeMachine->LoopEnd;
+        time = Hardware::TransposeMachine->Time;
+        short* dataFrame = new short[2];
+
+        SF_INFO info;
+        info.channels=2;
+        info.samplerate = Hardware::SampleRate;
+        info.format = SF_FORMAT_WAV | SF_FORMAT_PCM_16;
+        SNDFILE* file = sf_open(dialog.filename().toLocal8Bit().data(),SFM_WRITE,&info);
+        for(int i=0;i<Hardware::AudioInput->OutputChannelCount;++i)
+        {
+            Hardware::AudioInput->WriteOutput(i,0);
+        }
+
+        Hardware::TransposeMachine->Play();
+
+        if(dialog.isSong()){
+            int SamplePerBar = Hardware::TransposeMachine->BeatsToSample(Hardware::TransposeMachine->beatCount);
+            int startPosition = SamplePerBar * dialog.fromBar();
+            int endPosition = SamplePerBar * (dialog.toBar() + 1);
+
+            Hardware::TransposeMachine->Time = startPosition;
+            Hardware::TransposeMachine->LoopEnd = startPosition - 1;//To prevent looping
+            for(int i=startPosition;i < endPosition;++i)
+            {
+                Hardware::Update();
+                dataFrame[0] = Hardware::AudioOutput->ReadInput(0) * 32767;
+                dataFrame[1] = Hardware::AudioOutput->ReadInput(1) * 32767;
+                sf_write_short(file,dataFrame,2);
+            }
+
+        }else{
+            Hardware::TransposeMachine->Time = loopStart;
+            for(int i=0;i<dialog.loopCount();++i){
+                for(int j=0;j<(loopEnd - loopStart+1);++j)
+                {
+                    Hardware::Update();
+                    dataFrame[0] = Hardware::AudioOutput->ReadInput(0) * 32767;
+                    dataFrame[1] = Hardware::AudioOutput->ReadInput(1) * 32767;
+                    sf_write_short(file,dataFrame,2);
+                }
+            }
+        }
+
+        sf_close(file);
+        Hardware::TransposeMachine->Stop();
+        qDebug()<<"File write complete!";
+        Hardware::TransposeMachine->LoopStart = loopStart;
+        Hardware::TransposeMachine->LoopEnd = loopEnd;
+        Hardware::TransposeMachine->Time = time;
+        Hardware::StartAudio();
+        delete[] dataFrame;
     }
 
     virtual void closeEvent(QCloseEvent *event)

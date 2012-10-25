@@ -40,6 +40,10 @@ Rectangle{
         headerView.height = h
         flick.contentHeight = h
     }
+    function checkTrackCount(){
+        if(trackModel.count() !== headerView.count)
+            console.log("Track model incosistent!!");
+    }
     property int contentY:flick.contentY
     Flickable{
         id: flick

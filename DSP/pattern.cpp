@@ -3,7 +3,7 @@
 
 Pattern::Pattern(int ChannelCount)
 {
-    this->ChannelCount = ChannelCount;
+    this->channelCount = ChannelCount;
     data = new QVector<float>*[ChannelCount];
     for(int i=0;i<ChannelCount;++i)
         data[i] = new QVector<float>();
@@ -11,7 +11,7 @@ Pattern::Pattern(int ChannelCount)
 
 Pattern::~Pattern()
 {
-    for(int i=0;i<ChannelCount;++i)
+    for(int i=0;i<channelCount;++i)
     {
         delete data[i];
     }
@@ -21,6 +21,34 @@ Pattern::~Pattern()
 int Pattern::length()
 {
     return data[0]->count();
+}
+
+void Pattern::serializeData(QDataStream &stream)
+{
+    int len = data[0]->count();
+    stream<<len;
+    for(int i=0;i<len;++i)
+    {
+        for(int j=0;j<channelCount;++j)
+            stream<<data[j]->at(i);
+    }
+}
+
+void Pattern::deserializeData(QDataStream &stream)
+{
+    int len;
+    stream>>len;
+    for(int i=0;i<channelCount;++i)
+        data[i]->clear();
+    float sample;
+    for(int i=0;i<len;++i)
+    {
+        for(int j=0;j<channelCount;++j)
+        {
+            stream>>sample;
+            data[j]->push_back(sample);
+        }
+    }
 }
 
 void Pattern::Put(int channel, float val)

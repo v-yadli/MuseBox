@@ -94,7 +94,7 @@ Item {
         Item{
             ListView{
                 y: 0
-                property int rightMost: 1000
+                property int rightMost: flick.contentWidth
                 property variant droppedNote : undefined
                 interactive: false
                 id: arrangementView
@@ -104,6 +104,9 @@ Item {
                 z:1
                 delegate : Component {
                     TrackArrangementRow{
+                        ListView.onAdd:{
+                            console.log("Added new row");
+                        }
                         MouseArea{
                             z:-1
                             id: dragDropArea

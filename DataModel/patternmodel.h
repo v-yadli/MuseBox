@@ -30,6 +30,7 @@ public:
     //Add/remove interfaces
     bool removeRows ( int row, int count, const QModelIndex & parent = QModelIndex() );
     void import(PatternModel*);
+    int count(){ return patternList.count();}
 
     Q_INVOKABLE void setData(int row, const QString& role, QVariant data)
     {
