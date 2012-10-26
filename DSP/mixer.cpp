@@ -1,4 +1,5 @@
 #include "mixer.h"
+#include <QDebug>
 
 StereoMixer::StereoMixer(): Device(0,2)
 {
@@ -41,6 +42,7 @@ MixerChannel* StereoMixer::AddInputDevice(Device *dev)
 MixerChannel *StereoMixer::InsertInputDevice(int index,Device *dev)
 {
     //dev-OutputChannel->EP-InputChannel->Chain to Insert FX->LastInsertOutput->Mix->Out
+    //TODO master fader
     Q_ASSERT(dev->OutputChannelCount <= 2);
     Q_ASSERT(dev->OutputChannelCount > 0);
 
@@ -86,6 +88,7 @@ void StereoMixer::OnInputDeviceRemoved(QVector<int> removedChannels)
         int rmid = removedChannels[i];
         if(rmid % 2 != 0)
             continue;
+        qDebug()<<"Deleting input channel pair";
         RemoveInputChannel(rmid,2);
     }
  // If send count is not fixed, code is like this...

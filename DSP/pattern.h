@@ -13,7 +13,6 @@ public:
     void Put(int channel, float val);
     QString name;
     int channelCount;
-    unsigned int pos;
     int length();
     QVector<float>** data;
     PatternModel* recordingSession;

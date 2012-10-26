@@ -27,6 +27,12 @@ NoteModel::NoteModel(QObject *parent) :
     noteList.insert(0,dummyNote);
 }
 
+NoteModel::~NoteModel()
+{
+    while(noteList.count() > 0)
+        removeNote(0);
+}
+
 int NoteModel::rowCount(const QModelIndex& index) const
 {
     return noteList.count();

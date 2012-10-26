@@ -24,7 +24,7 @@ public:
     QVector<int> recordingChannels;
     PatternModel patternPool;
     Pattern* currentRecordingPattern;
-    PatternModel* currentRecordingSession ;
+    PatternModel* currentRecordingSession;
     NoteModel arrangement;
     TrackModel* model;
 

@@ -109,8 +109,8 @@ void Device::RemoveInputChannel(int Index, int count)
     memcpy(newICp, InputChannels, sizeof(EndPoint*) * Index);
     memcpy(newDp, InputChannelProviders, sizeof(Device*) * Index);
 
-    memcpy(newICp, InputChannels, sizeof(EndPoint*) * (InputChannelCount - Index - count));
-    memcpy(newDp, InputChannelProviders, sizeof(Device*) * (InputChannelCount - Index - count));
+    memcpy(newICp + Index, InputChannels + Index + count, sizeof(EndPoint*) * (InputChannelCount - Index - count));
+    memcpy(newDp + Index, InputChannelProviders + Index + count, sizeof(Device*) * (InputChannelCount - Index - count));
 
     delete[] InputChannels;
     delete[] InputChannelProviders;

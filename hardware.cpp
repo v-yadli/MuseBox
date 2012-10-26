@@ -207,6 +207,7 @@ void Hardware::StartAudio()
                                     );
     }
     rtAudioInstance->startStream();
+    qDebug()<<"Audio started";
 }
 
 void Hardware::StopAudio()
@@ -215,6 +216,7 @@ void Hardware::StopAudio()
 //        rtAudioInstance->abortStream();
     if(rtAudioInstance->isStreamOpen())
         rtAudioInstance->closeStream();
+    qDebug()<<"Audio stopped";
 }
 
 void Hardware::ResetAudio()
@@ -321,6 +323,7 @@ bool Hardware::InstallDevice(Device* dsp)
 }
 bool Hardware::RemoveDevice(Device* dsp)
 {
+    qDebug()<<"RemoveDevice";
     for(int i=0;i<DeviceList.count();++i)
         if(DeviceList[i] == dsp)
         {
@@ -333,6 +336,7 @@ bool Hardware::RemoveDevice(Device* dsp)
         {
             if (dsp == DependencyList[i].Target)
             {
+                qDebug()<<"RemoveInputDevice";
                 DependencyList[i].Source->__RemoveInputDevice__(dsp);
             }
             DependencyList.remove(i);

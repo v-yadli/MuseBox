@@ -105,6 +105,7 @@ bool TrackModel::removeRows(int row, int count, const QModelIndex &parent)
     if(count == 0)
         return true;
     HWLOCK;
+    qDebug()<<"begin remove rows";
     beginRemoveRows(parent,row,row+count-1);
     for(int i=0;i<count;++i)
     {
@@ -113,6 +114,7 @@ bool TrackModel::removeRows(int row, int count, const QModelIndex &parent)
         Hardware::RemoveDevice(track);//This will automatically desctruct the mixer channel and the track itself.
     }
     endRemoveRows();
+    qDebug()<<"end remove rows";
     return true;
 }
 
@@ -255,6 +257,8 @@ void TrackModel::loadFile(QString filename)
             note.position = position;
             trackList[i]->arrangement.insertNote(note,position);
         }
+        QModelIndex idx = index(i);
+        emit dataChanged(idx,idx);
     }
 
     file.close();

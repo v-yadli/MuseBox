@@ -19,26 +19,39 @@ Rectangle {
         musebox.exportSong()
         guiTimer.start()
     }
+    Timer {
+        id: loadProjectTimer
+        interval:500
+        repeat:false
+        onTriggered:{
+            projectName = musebox.loadProject("");
+            musebox.startAudio()
+            resetInterface();
+            guiTimer.start()
+        }
+    }
     function loadProject()
     {
         guiTimer.stop()
-        projectName = musebox.loadProject("");
-        resetInterface();
-        guiTimer.start()
+        musebox.stopAudio()
+        musebox.clearProject();
+        loadProjectTimer.start()
     }
     function saveProject()
     {
         guiTimer.stop()
+        musebox.stopAudio()
         projectName = musebox.saveProject(projectName);
+        musebox.startAudio()
         guiTimer.start()
     }
     function newProject()
     {
-        console.log("Entering new project")
-
         guiTimer.stop()
 
+        musebox.stopAudio()
         musebox.newProject();
+        musebox.startAudio()
         resetInterface();
 
         guiTimer.start()

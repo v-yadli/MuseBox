@@ -52,6 +52,7 @@ public:
         //TODO other properties, such as color
     };
     explicit NoteModel(QObject *parent = 0);
+    ~NoteModel();
     //Read interfaces
     int rowCount(const QModelIndex &parent = QModelIndex())const;
     QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;

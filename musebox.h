@@ -39,6 +39,15 @@ public:
     {
         Hardware::ResetAudio();
     }
+    Q_INVOKABLE void startAudio()
+    {
+        Hardware::StartAudio();
+    }
+    Q_INVOKABLE void stopAudio()
+    {
+        Hardware::StopAudio();
+    }
+
     Q_INVOKABLE void openConfigurationDialog() {
         qDebug()<<"Opening dialog...";
         AudioConfigurationDialog* dialog = new AudioConfigurationDialog();
@@ -163,16 +172,17 @@ public:
         }
         if(filename != "")
         {
+            trackModel.clear();
             trackModel.loadFile(filename);
         }
         return filename;
     }
+    Q_INVOKABLE void clearProject()
+    {
+        trackModel.clear();
+    }
     Q_INVOKABLE void newProject()
     {
-        Hardware::Lock();
-        Hardware::StopAudio();
-        Hardware::Unlock();
-
         NewProjectDialog dialog;
         if( QDialog::Accepted == dialog.exec())
         {
@@ -182,7 +192,6 @@ public:
             Hardware::TransposeMachine->SetBPM(dialog.bpm);
         }
 
-        Hardware::StartAudio();
     }
     Q_INVOKABLE void exportSong(){
         Hardware::StopAudio();
