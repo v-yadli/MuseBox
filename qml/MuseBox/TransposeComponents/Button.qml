@@ -8,6 +8,7 @@ Rectangle {
     signal pressed
     signal released
     signal pushed
+    property bool preventTriggerIfOutOfBound : true
     property string normalImage : "Stop.png"
     property string pushedImage : "StopHL.png"
     property bool latch : false
@@ -89,7 +90,7 @@ Rectangle {
         onReleased: {
             if(!latch) {
                 parent.state = "Normal"
-                if(mouseX >= 0 && mouseY >= 0 && mouseX < width && mouseY < height)
+                if((mouseX >= 0 && mouseY >= 0 && mouseX < width && mouseY < height) || !preventTriggerIfOutOfBound)
                     parent.released()
             }else{
                 if(parent.state == "Normal")

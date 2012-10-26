@@ -36,11 +36,16 @@ Transpose::Transpose(int BPM, QObject* parent)://A transpose is just a transpose
 
 void Transpose::setCurrentPosition(int posOnGUI)
 {
+    if(posOnGUI < 0)
+        posOnGUI = 0;
     PositionJumped = true;
     Time = (posOnGUI / 120.0) * BeatsToSample(beatCount);
 }
 void Transpose::setLoopStart(int posOnGUI)
 {
+    if(posOnGUI < 0)
+        posOnGUI = 0;
+
     LoopStart = ((int)(posOnGUI / 120.0)) * BeatsToSample(beatCount);
     if(LoopEnd < LoopStart)
     {
@@ -49,6 +54,8 @@ void Transpose::setLoopStart(int posOnGUI)
 }
 void Transpose::setLoopEnd(int posOnGUI)
 {
+    if(posOnGUI < 0)
+        posOnGUI = 0;
     LoopEnd = ((int)(posOnGUI / 120.0)) * BeatsToSample(beatCount);
     if(LoopEnd < LoopStart)
     {
@@ -134,6 +141,10 @@ void Transpose::Update()
             if(Time < LoopEnd && Time + Speed >= LoopEnd)
             {
                 Time = LoopStart;
+                PositionJumped = true;
+            }else if(Time > LoopStart && Time + Speed <= LoopStart)
+            {
+                Time = LoopEnd;
                 PositionJumped = true;
             }else
                 Time += Speed;

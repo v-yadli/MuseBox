@@ -11,6 +11,7 @@ Device::Device(unsigned int InputChannelCount, unsigned int OutputChannelCount)
     for (int i = 0; i < OutputChannelCount; ++i)
     {
         OutputChannels[i] = new EndPoint();
+        OutputChannels[i]->Data = 0;
     }
     for (int i=0;i<InputChannelCount;++i)
     {

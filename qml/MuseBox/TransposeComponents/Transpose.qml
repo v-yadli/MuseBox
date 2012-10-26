@@ -172,6 +172,7 @@ Item {
         }
         Button {
             id: rw
+            preventTriggerIfOutOfBound: false
             anchors.top: parent.top
             anchors.topMargin: 6
             anchors.left: parent.left
@@ -194,6 +195,7 @@ Item {
         }
         Button {
             id: ff
+            preventTriggerIfOutOfBound: false
             anchors.top: parent.top
             anchors.topMargin: 6
             anchors.left: parent.left
@@ -233,6 +235,10 @@ Item {
             latch: true
             onPushed:{
                 musebox.play()
+            }
+
+            onReleased:{
+                musebox.stop()
             }
         }
         RECORD {
