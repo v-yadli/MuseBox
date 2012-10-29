@@ -82,6 +82,9 @@ Item {
             width: 51
             height: 26
 
+            normalImage: "settings.png"
+            pushedImage: "settingsHL.png"
+
             onReleased:{
                 musebox.openConfigurationDialog()
             }
@@ -93,6 +96,9 @@ Item {
             y: 28
             width: 50
             height: 70
+
+            normalImage: "save.png"
+            pushedImage: "saveHL.png"
 
             onReleased:{
                 main.saveProject()
@@ -106,6 +112,9 @@ Item {
             width: 51
             height: 26
 
+            normalImage: "warning.png"
+            pushedImage: "warningHL.png"
+
             onReleased: {
                 musebox.resetAudio()
             }
@@ -118,6 +127,9 @@ Item {
             width: 50
             height: 26
 
+            normalImage: "newfile.png"
+            pushedImage: "newfileHL.png"
+
             onReleased:{
                 main.newProject()
             }
@@ -129,6 +141,9 @@ Item {
             y: 28
             width: 50
             height: 26
+
+            normalImage: "openfile.png"
+            pushedImage: "openfileHL.png"
 
             onReleased:{
                 main.loadProject()
@@ -298,6 +313,8 @@ Item {
             z: 8
 
             latch: true
+            normalImage: "repeat.png"
+            pushedImage: "repeatHL.png"
 
             onPushed: {
                 musebox.setLoop(true)

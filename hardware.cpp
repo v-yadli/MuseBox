@@ -7,6 +7,7 @@
 #include <QDebug>
 #include "DSP/devicetuple.h"
 #include "DSP/audiointerface.h"
+#include "audioconfigurationdialog.h"
 #include <cmath>
 
 RtAudio* Hardware::rtAudioInstance;
@@ -183,28 +184,35 @@ void Hardware::StartAudio()
 {
     StopAudio();
     try{
-    rtAudioInstance->openStream(&OutputDeviceParameters,
-                                &InputDeviceParameters,
-                                RTAUDIO_FLOAT32,
-                                SampleRate,
-                                &BufferFrames,
-                                rtAudioCallback,
-                                NULL, // User data
-                                NULL  // Stream options
-                                );
+        try{
+            rtAudioInstance->openStream(&OutputDeviceParameters,
+                                        &InputDeviceParameters,
+                                        RTAUDIO_FLOAT32,
+                                        SampleRate,
+                                        &BufferFrames,
+                                        rtAudioCallback,
+                                        NULL, // User data
+                                        NULL  // Stream options
+                                        );
+        }catch(...)
+        {
+            qDebug()<<"Having some problem with buffer size... Fallback to a preferred size";
+            BufferFrames = rtAudioInstance->getPreferredBufferSize();
+            rtAudioInstance->openStream(&OutputDeviceParameters,
+                                        &InputDeviceParameters,
+                                        RTAUDIO_FLOAT32,
+                                        SampleRate,
+                                        &BufferFrames,
+                                        rtAudioCallback,
+                                        NULL, // User data
+                                        NULL  // Stream options
+                                        );
+        }
     }catch(...)
     {
-        qDebug()<<"Having some problem with buffer size... Fallback to a preferred size";
-        BufferFrames = rtAudioInstance->getPreferredBufferSize();
-        rtAudioInstance->openStream(&OutputDeviceParameters,
-                                    &InputDeviceParameters,
-                                    RTAUDIO_FLOAT32,
-                                    SampleRate,
-                                    &BufferFrames,
-                                    rtAudioCallback,
-                                    NULL, // User data
-                                    NULL  // Stream options
-                                    );
+        AudioConfigurationDialog *dialog = new AudioConfigurationDialog();
+        dialog->show();
+        return;
     }
     rtAudioInstance->startStream();
     qDebug()<<"Audio started";

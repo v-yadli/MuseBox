@@ -21,12 +21,12 @@ class MuseBox : public QMainWindow
 public:
     explicit MuseBox(QWidget *parent = 0);
 
-//Project related
+    //Project related
     void NewProject();
     void LoadProject(QString path);
     void SaveProject(QString path);
 
-//Track manipulation
+    //Track manipulation
     void AddTrack();
     void RemoveTrack(int idx);
     void MoveTrack(int from, int to);
